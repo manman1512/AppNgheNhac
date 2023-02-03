@@ -4,7 +4,7 @@ import { AiOutlineHeart, AiFillHome, AiFillSetting } from 'react-icons/ai';
 import { RiPlayListFill } from 'react-icons/ri';
 import { CiLogout } from 'react-icons/ci';
 import { Link, useLocation } from 'react-router-dom';
-import Logoo from "../../images/Logooo.png";
+import Logoo from '../../images/Logooo.png';
 export default function Navigation({ className }) {
   const iconSize = '1.5rem';
   const bgColor = '#27AE60';
@@ -19,6 +19,9 @@ export default function Navigation({ className }) {
         break;
       case '/favorite':
         setSelect('favorite');
+        break;
+      case '/playlist':
+        setSelect('playlist');
         break;
       default:
         setSelect('home');
@@ -67,11 +70,7 @@ export default function Navigation({ className }) {
     <div className={`${className} `}>
       <div className="flex flex-col gap-2 justify-center items-center">
         <div className="flex font-semibold items-center  ">
-          <img
-            className="w-[80px] h-[80px]"
-            src={Logoo}
-            alt=""
-          />
+          <img className="w-[80px] h-[80px]" src={Logoo} alt="" />
           <p className=" text-white ">MEO</p>
         </div>
 
@@ -108,11 +107,12 @@ export default function Navigation({ className }) {
             </Link>
           </div>
           <div
+            user-label="playlist"
             onMouseOver={_onMouseOver}
             onMouseOut={_onMouseOut}
             className={`navigate p-2 rounded-[14px] w-full flex justify-between`}
           >
-            <Link className="flex">
+            <Link to="/playlist" className="flex">
               <RiPlayListFill size={iconSize} />
               <p className="ml-2">Playlist</p>
             </Link>
