@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { BiHeadphone, BiSearch } from 'react-icons/bi';
 import { AiOutlineHeart, AiFillHome, AiFillSetting } from 'react-icons/ai';
+import { RiPlayListFill } from 'react-icons/ri';
 import { CiLogout } from 'react-icons/ci';
 import { Link, useLocation } from 'react-router-dom';
-
+import Logoo from "../../images/Logooo.png";
 export default function Navigation({ className }) {
   const iconSize = '1.5rem';
   const bgColor = '#27AE60';
-  const iconColor = '#27AE60';
+  const iconColor = 'white';
 
   const location = useLocation();
   const [select, setSelect] = useState('home');
@@ -35,16 +36,16 @@ export default function Navigation({ className }) {
       }
     });
   }, [select]);
-  useEffect(()=>{
+  useEffect(() => {
     const listElement = document.querySelectorAll('.navigate');
-    listElement.forEach(el=>{
+    listElement.forEach((el) => {
       el.childNodes[0].style.color = iconColor;
-    })
-  },[])
+    });
+  }, []);
   function _onMouseOver(event) {
     event.stopPropagation();
     const element = event.currentTarget;
-    const label = element.getAttribute('user-label');
+    // const label = element.getAttribute('user-label');
     element.style.backgroundColor = bgColor;
     element.style.color = '#fff';
     element.childNodes[0].style.color = '#fff';
@@ -65,61 +66,81 @@ export default function Navigation({ className }) {
   return (
     <div className={`${className} `}>
       <div className="flex flex-col gap-2 justify-center items-center">
-        <img
-          className="rounded-full w-[40px] h-[40px]"
-          src="https://picsum.photos/40"
-          alt=""
-        />
-        <div className="items-center justify-around border-t-2 flex flex-col py-2 w-full gap-2">
+        <div className="flex font-semibold items-center  ">
+          <img
+            className="w-[80px] h-[80px]"
+            src={Logoo}
+            alt=""
+          />
+          <p className=" text-white ">MEO</p>
+        </div>
+
+        <div className="items-center justify-around flex flex-col py-3 w-full gap-2">
           <div
             user-label="home"
             onMouseOver={_onMouseOver}
             onMouseOut={_onMouseOut}
-            className={`navigate p-2 rounded-[14px] `}
+            className={`navigate p-2 rounded-[14px] w-full flex justify-between `}
           >
-            <Link to="/" className={``}>
+            <Link to="/" className="flex">
               <AiFillHome size={iconSize} />
+              <p className="ml-2">Trang Chủ</p>
             </Link>
           </div>
           <div
             onMouseOver={_onMouseOver}
             onMouseOut={_onMouseOut}
-            className={`navigate p-2 rounded-[14px]`}
+            className={`navigate p-2 rounded-[14px] w-full flex justify-between `}
           >
-            <Link className={``}>
+            <Link className="flex">
               <BiSearch size={iconSize} />
+              <p className="ml-2">Tìm Kiếm</p>
             </Link>
           </div>
           <div
             onMouseOver={_onMouseOver}
             onMouseOut={_onMouseOut}
-            className={`navigate p-2 rounded-[14px]`}
+            className={`navigate p-2 rounded-[14px] w-full flex justify-between`}
           >
-            <Link className={``}>
+            <Link className="flex">
               <BiHeadphone size={iconSize} />
+              <p className="ml-2">Đang Phát</p>
+            </Link>
+          </div>
+          <div
+            onMouseOver={_onMouseOver}
+            onMouseOut={_onMouseOut}
+            className={`navigate p-2 rounded-[14px] w-full flex justify-between`}
+          >
+            <Link className="flex">
+              <RiPlayListFill size={iconSize} />
+              <p className="ml-2">Playlist</p>
             </Link>
           </div>
           <div
             user-label="favorite"
             onMouseOver={_onMouseOver}
             onMouseOut={_onMouseOut}
-            className={`navigate p-2 rounded-[14px]`}
+            className={`navigate p-2 rounded-[14px] w-full flex justify-between`}
           >
-            <Link to="/favorite" className={``}>
+            <Link to="/favorite" className="flex">
               <AiOutlineHeart size={iconSize} />
+              <p className="ml-2">Yêu Thích</p>
             </Link>
           </div>
         </div>
       </div>
       <div className="flex items-center flex-col">
-        <div className="mb-5">
-          <Link>
+        <div className="mb-5 w-full flex justify-between">
+          <Link className="flex">
             <AiFillSetting size={iconSize} color={iconColor} />
+            <p className="ml-2 text-white">Cài Đặt</p>
           </Link>
         </div>
-        <div className="mb-5">
-          <Link>
+        <div className="mb-5 w-full flex justify-between">
+          <Link className="flex">
             <CiLogout size={iconSize} color={iconColor} />
+            <p className="ml-2 text-white">Đăng Xuất</p>
           </Link>
         </div>
       </div>
