@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { BiHeadphone, BiSearch } from 'react-icons/bi';
+import {BiSearch } from 'react-icons/bi';
 import { AiOutlineHeart, AiFillHome, AiFillSetting } from 'react-icons/ai';
 import { RiPlayListFill } from 'react-icons/ri';
 import { CiLogout } from 'react-icons/ci';
@@ -96,16 +96,18 @@ export default function Navigation({ className }) {
               <p className="ml-2">Tìm Kiếm</p>
             </Link>
           </div>
-          <div
-            onMouseOver={_onMouseOver}
-            onMouseOut={_onMouseOut}
-            className={`navigate p-2 rounded-[14px] w-full flex justify-between`}
-          >
-            <Link className="flex">
-              <BiHeadphone size={iconSize} />
-              <p className="ml-2">Đang Phát</p>
-            </Link>
-          </div>
+          {
+          // {<div
+          //   onMouseOver={_onMouseOver}
+          //   onMouseOut={_onMouseOut}
+          //   className={`navigate p-2 rounded-[14px] w-full flex justify-between`}
+          // >
+          //   <Link className="flex">
+          //     <BiHeadphone size={iconSize} />
+          //     <p className="ml-2">Đang Phát</p>
+          //   </Link>
+          // </div>
+          }
           <div
             user-label="playlist"
             onMouseOver={_onMouseOver}

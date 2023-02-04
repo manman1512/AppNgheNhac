@@ -1,57 +1,95 @@
 import React from 'react';
+import { GiLoveSong } from 'react-icons/gi';
+import { RiUserVoiceLine } from 'react-icons/ri';
+import { BsFillPlayCircleFill } from 'react-icons/bs';
+import Lyrics from './lyrics';
+import { AiFillStepBackward, AiFillStepNextward } from 'react-icons/ai';
+import { MdSkipNext } from 'react-icons/md';
+import { IoMdSkipBackward } from 'react-icons/io';
 
 export default function Favorite() {
   return (
-    <div className=" grid grid-cols-5 gap-5">
-      <div
-        className="w-[200px] font-mono rounded-lg mt-6 ml-6 h-60 bg-white "
-        style={{
-          boxShadow: 'rgba(0, 0, 0, 0.24) 0px 3px 8px',
-        }}
-      >
-        yeu thich
+    <div
+      className="text-white flex justify-between 
+    bg-gradient-to-r from-slate-900 via-green-400 to-pink-500"
+    >
+      <div className="flex flex-col justify-between">
+        <div className="flex items-center mt-2 ml-2">
+          <GiLoveSong size="12rem" />
+          <p className="text-5xl font-bold">Bài hát yêu thích của bạn</p>
+        </div>
+        <div className="ml-11 relative overflow-x-auto shadow-md sm:rounded-lg">
+          <table className="w-full text-center">
+            <thead className="text-lg">
+              <tr>
+                <th scope="col" className="px-20 py-5">
+                  STT
+                </th>
+                <th scope="col" className="px-20 py-5">
+                  Bài hát
+                </th>
+                <th scope="col" className="px-20 py-5">
+                  Nghệ sĩ
+                </th>
+                <th scope="col" className="px-20 py-5">
+                  Ngày thêm
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr className="hover:bg-[#171717]">
+                <td>1</td>
+                <td>Vì anh đâu có biết</td>
+                <td>Madihu</td>
+                <td>4/2</td>
+              </tr>
+              <tr className="hover:bg-[#171717]">
+                <td>2</td>
+                <td>Witchy Woman</td>
+                <td>The Eagles</td>
+                <td>2/3</td>
+              </tr>
+              <tr className="hover:bg-[#171717]">
+                <td>3</td>
+                <td>Shining Star</td>
+                <td>Earth, Wind, and Fire</td>
+                <td>1/2</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div
+          className="w-full h-20 bg-gradient-to-r from-slate-800 via-green-300 to-pink-400 
+        flex items-center justify-between"
+        >
+          <div className="flex items-center">
+            <div className="m-4">
+              <img
+                className="w-[50px] h-[50px]"
+                src="https://picsum.photos/40"
+                alt=""
+              />
+            </div>
+            <div>
+              <div>Vì anh đâu có biết</div>
+              <div className="flex items-center">
+                <RiUserVoiceLine />
+                <div className="ml-1">Madihu</div>
+              </div>
+            </div>
+          </div>
+          <div>
+            <div className="flex items-center">
+              <IoMdSkipBackward size="1.2rem" color="black" className='mr-5'/>
+              <BsFillPlayCircleFill color="black" size="2rem"/>
+              <MdSkipNext size="1.8rem" color="black" className='ml-3'/>
+            </div>
+            <div></div>
+          </div>
+          <div>am luong</div>
+        </div>
       </div>
-      <div
-        className="w-[200px] font-mono rounded-lg m-6 h-60 bg-white "
-        style={{
-          boxShadow: 'rgba(0, 0, 0, 0.24) 0px 3px 8px',
-        }}
-      >
-        yeu thich
-      </div>
-      <div
-        className="w-[200px] font-mono rounded-lg m-6 h-60 bg-white "
-        style={{
-          boxShadow: 'rgba(0, 0, 0, 0.24) 0px 3px 8px',
-        }}
-      >
-        yeu thich
-      </div>
-
-      <div
-        className="w-[200px] font-mono rounded-lg m-6 h-60 bg-white "
-        style={{
-          boxShadow: 'rgba(0, 0, 0, 0.24) 0px 3px 8px',
-        }}
-      >
-        yeu thich
-      </div>
-      <div
-        className="w-[200px] font-mono rounded-lg m-6 h-60 bg-white "
-        style={{
-          boxShadow: 'rgba(0, 0, 0, 0.24) 0px 3px 8px',
-        }}
-      >
-        yeu thich
-      </div>
-      <div
-        className="w-[200px] font-mono rounded-lg m-6 h-60 bg-white "
-        style={{
-          boxShadow: 'rgba(0, 0, 0, 0.24) 0px 3px 8px',
-        }}
-      >
-        yeu thich
-      </div>
+      <Lyrics />
     </div>
   );
 }
