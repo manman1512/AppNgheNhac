@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import {BiSearch } from 'react-icons/bi';
+import { BiSearch } from 'react-icons/bi';
 import { AiOutlineHeart, AiFillHome, AiFillSetting } from 'react-icons/ai';
 import { RiPlayListFill } from 'react-icons/ri';
 import { CiLogout } from 'react-icons/ci';
@@ -12,6 +12,8 @@ export default function Navigation({ className }) {
 
   const location = useLocation();
   const [select, setSelect] = useState('home');
+  // const [menu, setMenu] = useState(false);
+
   useEffect(() => {
     switch (location.pathname) {
       case '/':
@@ -22,6 +24,9 @@ export default function Navigation({ className }) {
         break;
       case '/playlist':
         setSelect('playlist');
+        break;
+      case '/setting':
+        setSelect('setting');
         break;
       default:
         setSelect('home');
@@ -66,6 +71,11 @@ export default function Navigation({ className }) {
       }
     });
   }
+
+  // const hideMenu = (e) => {
+  //   setMenu(true)
+  // };
+
   return (
     <div className={`${className} `}>
       <div className="flex flex-col gap-2 justify-center items-center">
@@ -97,16 +107,16 @@ export default function Navigation({ className }) {
             </Link>
           </div>
           {
-          // {<div
-          //   onMouseOver={_onMouseOver}
-          //   onMouseOut={_onMouseOut}
-          //   className={`navigate p-2 rounded-[14px] w-full flex justify-between`}
-          // >
-          //   <Link className="flex">
-          //     <BiHeadphone size={iconSize} />
-          //     <p className="ml-2">Đang Phát</p>
-          //   </Link>
-          // </div>
+            // {<div
+            //   onMouseOver={_onMouseOver}
+            //   onMouseOut={_onMouseOut}
+            //   className={`navigate p-2 rounded-[14px] w-full flex justify-between`}
+            // >
+            //   <Link className="flex">
+            //     <BiHeadphone size={iconSize} />
+            //     <p className="ml-2">Đang Phát</p>
+            //   </Link>
+            // </div>
           }
           <div
             user-label="playlist"
@@ -132,12 +142,15 @@ export default function Navigation({ className }) {
           </div>
         </div>
       </div>
-      <div className="flex items-center flex-col">
+      <div className="flex items-center flex-col relative">
         <div className="mb-5 w-full flex justify-between">
           <Link className="flex">
             <AiFillSetting size={iconSize} color={iconColor} />
             <p className="ml-2 text-white">Cài Đặt</p>
           </Link>
+          {
+            // menu && <div className="bg-blue-50 absolute ml-24">Menu</div>
+          }
         </div>
         <div className="mb-5 w-full flex justify-between">
           <Link className="flex">
