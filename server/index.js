@@ -9,6 +9,7 @@ const songRouter = require('./routes/song.route')
 const userRouter = require('./routes/user.route')
 const authRouter = require('./routes/auth.route');
 const playListRoute = require('./routes/playlist.route');
+const artistsRouter = require('./routes/artist.route');
 
 const path = require('path');
 
@@ -39,6 +40,8 @@ const PORT = process.env.PORT || 2023;
   app.use('/api/songs', songRouter)
   app.use('/api/users', userRouter)
   app.use('/api/playLists', playListRoute)
+  app.use('/api/artists', artistsRouter)
+
 
   server.listen(PORT, () => {
     console.log('Server is running on port ' + PORT);

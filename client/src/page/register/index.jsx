@@ -1,5 +1,8 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import axiosClient from '../../axiosClient';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 export function Input(props) {
   const { name, id, placeholder } = props;
@@ -19,6 +22,45 @@ export function Input(props) {
 }
 
 export default function Register() {
+  const navigate = useNavigate();
+  const [pass, setPass] = useState(true);
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const username = e.target.username.value;
+    const displayName = e.target.displayName.value;
+    const password = e.target.password.value;
+    const passwordConfirm = e.target.passwordConfirm.value;
+    // console.log(username)
+
+    try {
+      // if(password !== passwordConfirm){
+      //   setPass(false)
+
+      // }else {
+      const res = await axiosClient.post('/auth/register', {
+        username,
+        password,
+        passwordConfirm,
+        displayName,
+      });
+      toast.success('Đăng ký thành công!', {
+        position: 'top-right',
+        autoClose: 500,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: 'colored',
+        onClose: () => {
+          navigate('/login', { replace: true });
+        },
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <div
       className="container-register p-5 w-full min-h-screen flex flex-wrap 
@@ -26,10 +68,10 @@ export default function Register() {
     >
       {/* <FormProvider {...methods}> */}
       <div className="border-2 bg-white rounded-xl pr-14 pl-14 pb-14 pt-10 border-gray-500">
-        <form>
+        <form onSubmit={handleSubmit}>
           <h1 className="text-center pb-4 font-semibold text-3xl ">ĐĂNG KÝ</h1>
           <div className="flex flex-col">
-            <label for="displayName" className="font-bold">
+            <label htmlFor="displayName" className="font-bold">
               Tên hiển thị
             </label>
             <Input
@@ -37,7 +79,7 @@ export default function Register() {
               id="displayName"
               name="displayName"
             />
-            <label for="username" className="font-bold">
+            <label htmlFor="username" className="font-bold">
               Tên đăng nhập
             </label>
             <Input
@@ -45,7 +87,7 @@ export default function Register() {
               id="username"
               name="username"
             />
-            <label for="password" className="font-bold">
+            <label htmlFor="password" className="font-bold">
               Tạo mật khẩu
             </label>
             <Input
@@ -54,7 +96,7 @@ export default function Register() {
               name="password"
               className="inp"
             />
-            <label for="passwordConfirm" className="font-bold">
+            <label htmlFor="passwordConfirm" className="font-bold">
               Nhập lại mật khẩu
             </label>
             <Input
@@ -86,6 +128,7 @@ export default function Register() {
             >
               Đăng ký
             </button>
+            <ToastContainer />
 
             <div className="pt-9 flex justify-center">
               <span>Bạn đã có tài khoản?</span>

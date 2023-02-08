@@ -1,5 +1,5 @@
 # AppNgheNhac
 
-# runClient: 'npm start'
+# runClient: 1.'npm start' 2.npm install
 
-# runServer: 'npm run server'
+# runServer: 1.'npm run server' 2.npm install

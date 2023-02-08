@@ -27,12 +27,6 @@ const userSchema = new Schema(
       type: Date,
       default: Date.now,
     },
-    // articles:[
-    //   {
-    //     type: mongoose.Schema.Types.ObjectId,
-    //     ref: 'Article',
-    //   }
-    // ],
     images:[
       {
         type: String,

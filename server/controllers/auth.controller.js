@@ -37,7 +37,7 @@ module.exports = {
         process.env.ACCESS_TOKEN_SECRET
       );
   
-      res.json({ success: true, messages: "Tao User thanh cong!", accessToken });
+      res.json({ success: true, message: "Tao User thanh cong!", accessToken });
     } catch (error) {
       console.log(error);
       res.status(500).json({ success: false, message: "Loi Server!" });
@@ -58,8 +58,8 @@ module.exports = {
           return res
           .status(400)
           .json({ succes: false, mesage: 'Username hoac Passwowd khong dung!' });
-      console.log(password);
-      console.log(User.password)
+      // console.log(password);
+      // console.log(User.password)
       const passswordValid = await argon2.verify(User.password, password); //verify -> kiem chung
   
       if (!passswordValid)
