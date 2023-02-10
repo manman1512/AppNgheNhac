@@ -16,7 +16,7 @@ module.exports = {
     const { page } = req.params;
     const { count } = req.params;
     try {
-      const data = await ZingMp3.getArtist(id, page, count);
+      const data = await ZingMp3.getListArtistSong(id, page, count);
       res.status(200).json(data);
     } catch (error) {
       console.log(error);

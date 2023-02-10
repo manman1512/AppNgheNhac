@@ -4,19 +4,19 @@
 const { ZingMp3 } = require("zingmp3-api-full");
 
 module.exports = {
-  getSong: async (req, res) => {
-    const { id } = req.params;
+  getHome: async (req, res) => {
     try {
-      const data = await ZingMp3.getSong(id);
+      const data = await ZingMp3.getHome();
       res.status(200).json(data);
     } catch (error) {
       console.log(error);
     }
   },
 
-  getHome: async (req, res) => {
+  getSong: async (req, res) => {
+    const { id } = req.params;
     try {
-      const data = await ZingMp3.getHome();
+      const data = await ZingMp3.getSong(id);
       res.status(200).json(data);
     } catch (error) {
       console.log(error);
@@ -61,6 +61,4 @@ module.exports = {
       console.log(error);
     }
   },
-
-
 };

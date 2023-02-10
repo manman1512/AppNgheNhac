@@ -78,7 +78,7 @@ export default function Navigation({ className }) {
 
   return (
     <div className={`${className} `}>
-      <div className="flex flex-col gap-2 justify-center items-center">
+      <div className="flex flex-col gap-2 justify-center items-center ">
         <div className="flex font-semibold items-center  ">
           <img className="w-[80px] h-[80px]" src={Logoo} alt="" />
           <p className=" text-white ">MEO</p>

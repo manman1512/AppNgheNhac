@@ -4,7 +4,7 @@ module.exports = {
     getArtist : (req, res) =>{
         const {name} = req.params;
         try {
-            const data = artist.;
+            const data = artist
             res.status(200).json(data);
           } catch (error) {
             console.log(error);
