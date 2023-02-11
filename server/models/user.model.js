@@ -32,6 +32,12 @@ const userSchema = new Schema(
         type: String,
       }
     ],
+    playList: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Playlist"
+      }
+    ]
   },
   { timestamps: true }
 );
