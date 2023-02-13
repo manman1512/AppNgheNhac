@@ -3,7 +3,7 @@ const http = require('http');
 require('dotenv').config();
 const mongoose = require('mongoose');
 const cors = require('cors');
-// const middleware = require('./middleware');
+const middleware = require('./middleware');
 
 const songRouter = require('./routes/song.route')
 const userRouter = require('./routes/user.route')
@@ -36,10 +36,10 @@ const PORT = process.env.PORT || 2023;
     })
   );
   app.use('/api/auth', authRouter)
-  // app.use(middleware);
   app.use('/api/songs', songRouter)
+  app.use(middleware);
   app.use('/api/users', userRouter)
-  app.use('/api/playLists', playListRoute)
+  app.use('/api/playlists', playListRoute)
   app.use('/api/artists', artistsRouter)
 
 

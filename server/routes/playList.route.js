@@ -1,10 +1,11 @@
 const express = require('express');
 const router = express.Router();
 
-const {createPlayList} = require('../controllers/playList.controller')
+const {createPlayList, addSongByUser} = require('../controllers/playList.controller')
 
 router.post('/createPlayList', createPlayList)
-router.post('addSongByUser', addSongByUser)
+router.post("/addSongByUser/:playListId/:songId", addSongByUser)
+// router.post('', addSongByUser)
 // const {getTop100, getPlsaylist, getDetailPlaylist} = require('../controllers/playList.controller')
 // router.get('/getDetailPlaylist/:id', getDetailPlaylist)
 // router.get("/getTop100/:id", getTop100);

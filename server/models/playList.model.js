@@ -11,6 +11,13 @@ const playlistsschema = new Schema(
       type: String,
 
     },
+    listSong:[
+      {
+        type: Schema.Types.ObjectId,
+        ref: "songs"
+      }
+    ],
+    
     owner: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User"

@@ -1,21 +1,32 @@
-const artists = require("../data/artist.json");
-const fs = require("fs");
-const path = require("path");
+const songs = require("../models/song.model");
+const { ZingMp3 } = require("zingmp3-api-full");
 
-module.exports ={
-  getSong: async (req, res) =>{
-    const {id} = req.params;
+module.exports = {
+  getSong: async (req, res) => {
+    const { id } = req.params;
+    try {
+      const song = await songs.findOne({id})
+      if (songs) {
+        res.status(200).json(song);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  },
 
-    
-  }
-}
+  getHomeMp3: async (req, res) => {
+    try {
+      const data = await ZingMp3.getHome();
+      res.status(200).json(data);
+    } catch (error) {
+      console.log(error);
+    }
+  },
+};
 
 
 
-
-
-
-
+ 
 
 
 
