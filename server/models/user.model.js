@@ -34,7 +34,7 @@ const userSchema = new Schema(
     ],
     playList: [
       {
-        type: mongoose.Schema.Types.ObjectId,
+        type: Schema.Types.ObjectId,
         ref: "Playlist"
       }
     ]

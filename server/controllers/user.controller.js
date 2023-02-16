@@ -1,7 +1,13 @@
 const user = require('../models/user.model');
 const argon2 = require('argon2');
+const playlists = require('../models/playList.model')
 
 module.exports = {
+  // addPlayList: async (req, res) =>{
+  //   const {id} = req.playlists;
+  //   user.playList.
+  // },
+
   //UPDATE
   update: async (req, res) => {
     const { id } = req.params;

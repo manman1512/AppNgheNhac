@@ -14,9 +14,24 @@ module.exports = {
     }
   },
 
+  // add song on system
+  addSong: async (req, res) => {
+    
+  }, 
+
   getHomeMp3: async (req, res) => {
     try {
       const data = await ZingMp3.getHome();
+      res.status(200).json(data);
+    } catch (error) {
+      console.log(error);
+    }
+  },
+
+    getSongMP3: async (req, res) => {
+    const { id } = req.params;
+    try {
+      const data = await ZingMp3.getSong(id);
       res.status(200).json(data);
     } catch (error) {
       console.log(error);
@@ -50,15 +65,7 @@ module.exports = {
 //     }
 //   },
 
-//   getSong: async (req, res) => {
-//     const { id } = req.params;
-//     try {
-//       const data = await ZingMp3.getSong(id);
-//       res.status(200).json(data);
-//     } catch (error) {
-//       console.log(error);
-//     }
-//   },
+
 
 //   getTop100: async (req, res) => {
 //     try {

@@ -1,9 +1,10 @@
 const express = require('express');
 const router = express.Router();
 
-const {getSong, getHomeMp3} = require('../controllers/song.controller')
+const {getSong, getHomeMp3, getSongMP3} = require('../controllers/song.controller')
 
 router.get('/getSong/:id', getSong)
+router.get('/getSongMP3/:id', getSongMP3)
 router.get('/getHomeMp3', getHomeMp3)
 
 module.exports = router;
