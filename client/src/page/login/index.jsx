@@ -1,11 +1,14 @@
 import React, { useState } from 'react';
 import { Link, Navigate, useNavigate } from 'react-router-dom';
 import axiosClient from '../../axiosClient';
-import { Input } from '../register';
+// import { Input } from '../register';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { FormProvider, useForm, useFormContext } from 'react-hook-form';
 import { MdError } from 'react-icons/md';
+import LogoHeader from '../../images/LogoHeader.png';
+import { AiFillGoogleCircle } from 'react-icons/ai';
+import { FaFacebookSquare } from 'react-icons/fa';
 
 export default function Login() {
   const navigate = useNavigate();
@@ -51,10 +54,29 @@ export default function Login() {
         <div className="bg-white pr-14 pl-14 pb-14 pt-10">
           <FormProvider>
             <form action="" onSubmit={handleSubmit}>
-              <div className="flex flex-col items-center">
-                <div className="text-center pb-4 font-semibold text-3xl ">
-                  ĐĂNG NHẬP
+              <div className="flex justify-center items-center">
+                <img className="w-[80px] h-[80px]" src={LogoHeader} alt="" />
+                <div className="font-bold text-3xl">SongSphere</div>
+              </div>
+              <div>
+                <div
+                  className="flex items-center justify-center bg-[#405A93] text-white rounded-2xl
+              p-2"
+                >
+                  <FaFacebookSquare />
+                  <p className="ml-1 font-bold">Đăng nhập bằng Facebook</p>
                 </div>
+                <div
+                  className="flex items-center justify-center rounded-2xl border-spacing-2 
+              border-2 border-gray-500 p-2 mt-2"
+                >
+                  <AiFillGoogleCircle color="red" />
+                  <p className="ml-1 font-bold">Đăng nhập bằng Google</p>
+                </div>
+              </div>
+
+              <div className="flex justify-center mt-1">
+                <i>hoặc</i>
               </div>
               <div className="flex flex-col">
                 <label for="username" className="font-bold">
@@ -81,19 +103,21 @@ export default function Login() {
                 {success && (
                   <div className="text-[#FF0000] mt-3 flex ml-1 items-center">
                     <MdError color="red" />
-                    <div className='ml-1'>Username hoặc pasword không đúng!</div>
+                    <div className="ml-1">
+                      Username hoặc pasword không đúng!
+                    </div>
                   </div>
                 )}
                 <button
                   className="h-12 outline-none py-0 px-6 mt-5 w-40 bg-slate-800 text-white 
-            hover:bg-slate-600 rounded-lg ml-28"
+                  hover:bg-slate-600 rounded-lg ml-28 font-bold"
                   type="submit"
                 >
                   Đăng nhập
                 </button>
                 <ToastContainer />
 
-                <div className="pt-9 flex justify-center">
+                <div className="pt-5 flex justify-center ">
                   <span>Bạn chưa có tài khoản?</span>
                   <Link to="/register" className="text-blue-500 ml-1">
                     Đăng ký

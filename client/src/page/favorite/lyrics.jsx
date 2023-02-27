@@ -4,7 +4,7 @@ export default function Lyrics() {
   return (
     <div
         className=" py-3 box-border flex flex-col items-center w-[20rem]
-         ml-6 h-[43.5rem] bg-[#3BAC6A]"
+         ml-6 h-[43.5rem]"
         style={{
           boxShadow: 'rgba(0, 0, 0, 0.24) 0px 3px 8px',
         }}

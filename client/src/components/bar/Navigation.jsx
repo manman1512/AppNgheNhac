@@ -1,19 +1,21 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { BiSearch } from 'react-icons/bi';
 import { AiOutlineHeart, AiFillHome, AiFillSetting } from 'react-icons/ai';
 import { RiPlayListFill } from 'react-icons/ri';
 import { CiLogout } from 'react-icons/ci';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import Logoo from '../../images/Logooo.png';
+import { Context } from '../store/Context.js';
 export default function Navigation({ className }) {
   const iconSize = '1.5rem';
   const bgColor = '#27AE60';
-  const iconColor = 'white';
+  const iconColor = 'black';
 
   const location = useLocation();
   const [select, setSelect] = useState('home');
-  // const [menu, setMenu] = useState(false);
+  const [state, dispatch] = useContext(Context);
 
+  // console.log(state.user)
   useEffect(() => {
     switch (location.pathname) {
       case '/':
@@ -72,19 +74,21 @@ export default function Navigation({ className }) {
     });
   }
 
-  // const hideMenu = (e) => {
-  //   setMenu(true)
-  // };
-
   return (
     <div className={`${className} `}>
       <div className="flex flex-col gap-2 justify-center items-center ">
-        <div className="flex font-semibold items-center  ">
-          <img className="w-[80px] h-[80px]" src={Logoo} alt="" />
-          <p className=" text-white ">MEO</p>
-        </div>
+        {
+          // <div className=" font-semibold items-center flex flex-col mb-6">
+          //   <img
+          //     className="w-[85px] h-[85px] items-center"
+          //     src={Logoo}
+          //     alt=""
+          //   />
+          //   <p className=" text-white text-2xl font-mono ">SongSphere</p>
+          // </div>
+        }
 
-        <div className="items-center justify-around flex flex-col py-3 w-full gap-2">
+        <div className="items-center justify-around flex flex-col  w-full gap-2">
           <div
             user-label="home"
             onMouseOver={_onMouseOver}
@@ -93,72 +97,90 @@ export default function Navigation({ className }) {
           >
             <Link to="/" className="flex">
               <AiFillHome size={iconSize} />
-              <p className="ml-2">Trang Chủ</p>
-            </Link>
-          </div>
-          <div
-            onMouseOver={_onMouseOver}
-            onMouseOut={_onMouseOut}
-            className={`navigate p-2 rounded-[14px] w-full flex justify-between `}
-          >
-            <Link className="flex">
-              <BiSearch size={iconSize} />
-              <p className="ml-2">Tìm Kiếm</p>
+              <p className="ml-2 font-bold">Trang Chủ</p>
             </Link>
           </div>
           {
-            // {<div
-            //   onMouseOver={_onMouseOver}
-            //   onMouseOut={_onMouseOut}
-            //   className={`navigate p-2 rounded-[14px] w-full flex justify-between`}
-            // >
-            //   <Link className="flex">
-            //     <BiHeadphone size={iconSize} />
-            //     <p className="ml-2">Đang Phát</p>
-            //   </Link>
-            // </div>
+          //   <div
+          //   onMouseOver={_onMouseOver}
+          //   onMouseOut={_onMouseOut}
+          //   className={`navigate p-2 rounded-[14px] w-full flex justify-between `}
+          // >
+          //   <Link className="flex">
+          //     <BiSearch size={iconSize} />
+          //     <p className="ml-2 font-bold">Tìm Kiếm</p>
+          //   </Link>
+          // </div>
           }
-          <div
-            user-label="playlist"
-            onMouseOver={_onMouseOver}
-            onMouseOut={_onMouseOut}
-            className={`navigate p-2 rounded-[14px] w-full flex justify-between`}
-          >
-            <Link to="/playlist" className="flex">
-              <RiPlayListFill size={iconSize} />
-              <p className="ml-2">Playlist</p>
-            </Link>
-          </div>
-          <div
-            user-label="favorite"
-            onMouseOver={_onMouseOver}
-            onMouseOut={_onMouseOut}
-            className={`navigate p-2 rounded-[14px] w-full flex justify-between`}
-          >
-            <Link to="/favorite" className="flex">
-              <AiOutlineHeart size={iconSize} />
-              <p className="ml-2">Yêu Thích</p>
-            </Link>
-          </div>
+          {state.user ? (
+            <div
+              user-label="playlist"
+              onMouseOver={_onMouseOver}
+              onMouseOut={_onMouseOut}
+              className={`navigate p-2 rounded-[14px] w-full flex justify-between`}
+            >
+              <Link to="/playlist" className="flex">
+                <RiPlayListFill size={iconSize} />
+                <p className="ml-2 font-bold">Tạo Playlist</p>
+              </Link>
+            </div>
+          ) : (
+            <div
+              user-label="playlist"
+              onMouseOver={_onMouseOver}
+              onMouseOut={_onMouseOut}
+              className={`navigate p-2 rounded-[14px] w-full flex justify-between`}
+            >
+              <Link to="/login" className="flex">
+                <RiPlayListFill size={iconSize} />
+                <p className="ml-2 font-bold">Playlist</p>
+              </Link>
+            </div>
+          )}
+
+          {state.user ? (
+            <div
+              user-label="favorite"
+              onMouseOver={_onMouseOver}
+              onMouseOut={_onMouseOut}
+              className={`navigate p-2 rounded-[14px] w-full flex justify-between`}
+            >
+              <Link to="/favorite" className="flex">
+                <AiOutlineHeart size={iconSize} />
+                <p className="ml-2 font-bold">Yêu Thích</p>
+              </Link>
+            </div>
+          ) : (
+            <div
+              user-label="favorite"
+              onMouseOver={_onMouseOver}
+              onMouseOut={_onMouseOut}
+              className={`navigate p-2 rounded-[14px] w-full flex justify-between`}
+            >
+              <Link to="/login" className="flex">
+                <AiOutlineHeart size={iconSize} />
+                <p className="ml-2 font-bold">Yêu Thích</p>
+              </Link>
+            </div>
+          )}
         </div>
       </div>
-      <div className="flex items-center flex-col relative">
-        <div className="mb-5 w-full flex justify-between">
-          <Link className="flex">
-            <AiFillSetting size={iconSize} color={iconColor} />
-            <p className="ml-2 text-white">Cài Đặt</p>
-          </Link>
-          {
-            // menu && <div className="bg-blue-50 absolute ml-24">Menu</div>
-          }
-        </div>
-        <div className="mb-5 w-full flex justify-between">
-          <Link className="flex">
-            <CiLogout size={iconSize} color={iconColor} />
-            <p className="ml-2 text-white">Đăng Xuất</p>
-          </Link>
-        </div>
-      </div>
+      {
+        
+        // {state.user && (
+        //   <div className="flex items-center flex-col relative">
+        //     <div className="mb-5 w-full flex justify-between">
+        //       <Link className="flex">
+        //         <AiFillSetting size={iconSize} color={iconColor} />
+        //         <p className="ml-2 font-bold">Cài Đặt</p>
+        //       </Link>
+        //       {
+        //         // menu && <div className="bg-blue-50 absolute ml-2 font-bold4">Menu</div>
+        //       }
+        //     </div>
+        //   </div>
+        // )}
+      }
     </div>
   );
 }
