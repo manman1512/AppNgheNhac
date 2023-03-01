@@ -11,6 +11,10 @@ const playlistsschema = new Schema(
       type: String,
 
     },
+    owner: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User"
+    },
     listSong:[
       {
         type: Schema.Types.ObjectId,
@@ -18,10 +22,6 @@ const playlistsschema = new Schema(
       }
     ],
     
-    owner: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "User"
-    }
     // numOfItems: 0,
   },
   { timestamps: true }

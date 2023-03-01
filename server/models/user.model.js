@@ -34,8 +34,14 @@ const userSchema = new Schema(
     ],
     playList: [
       {
-        type: Schema.Types.ObjectId,
+        type: mongoose.Schema.Types.ObjectId,
         ref: "Playlist"
+      }
+    ],
+    loveSong: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "songs"
       }
     ]
   },
