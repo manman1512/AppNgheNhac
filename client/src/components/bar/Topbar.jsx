@@ -37,23 +37,23 @@ export default function Topbar() {
         <p className="  text-2xl ">SongSphere</p>
       </Link>
 
-      <div class="relative w-96 mx-auto">
+      <div className="relative w-96 mx-auto">
         <input
           type="search"
-          class="block p-2 w-full z-20 rounded-3xl
+          className="block p-2 w-full z-20 rounded-3xl
             border-gray-500 border outline-none "
           placeholder="Tìm kiếm bài hát, nghệ sĩ, album..."
         />
         <button
           type="submit"
-          class="absolute top-0 right-0 p-2.5
+          className="absolute top-0 right-0 p-2.5
              bg-[#f4f3f3] rounded-r-3xl border border-gray-500
              focus:outline-none  dark:bg-[#f4f3f3]
              "
         >
           <svg
             aria-hidden="true"
-            class="w-5 h-5"
+            className="w-5 h-5"
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"

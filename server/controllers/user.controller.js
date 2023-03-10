@@ -1,24 +1,20 @@
 const user = require('../models/user.model');
 const argon2 = require('argon2');
-const playlists = require('../models/playList.model')
+// const playlists = require('../models/playList.model')
 
 module.exports = {
-  // addPlayList: async (req, res) =>{
-  //   const {id} = req.playlists;
-  //   user.playList.
-  // },
 
   //UPDATE
   update: async (req, res) => {
-    const { id } = req.params;
+    const { _id } = req.user;
     const {password, displayName} = req.body;
     if(!req.body.password){
       delete req.body.password;
     }
-    if (req.body.userId === id) {
+    // if (req.body.userId === _id) {
       if(password===""){
         const updateUser = await user.findByIdAndUpdate(
-          id,
+          _id,
           { 
             // password: hashedPass,
             displayName
@@ -34,7 +30,7 @@ module.exports = {
         try {
           const hashedPass = await argon2.hash(password);
           const updateUser = await user.findByIdAndUpdate(
-            id,
+            _id,
             { 
               password: hashedPass,
               displayName
@@ -52,14 +48,14 @@ module.exports = {
           res.status(500).json({ success: false, message: 'Loi Server!' });
         }
       }
-    } else {
-      res
-        .status(400)
-        .json({
-          success: false,
-          message: 'Chi update duoc Tai khoan cua ban!',
-        });
-    }
+    // } else {
+    //   res
+    //     .status(400)
+    //     .json({
+    //       success: false,
+    //       message: 'Chi update duoc Tai khoan cua ban!',
+    //     });
+    // }
   },
 
   //GET USER

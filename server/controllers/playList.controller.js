@@ -22,15 +22,18 @@ const createPlayList = async (req, res) => {
       .json({ success: false, message: "Title khong duoc trong!" });
   }
   try {
-    const playList = await Playlists.findOne({ title });
+    const playlist = await Playlists.findOne({ title });
     const User = await user.findById(_id);
-    if (playList) {
+    // console.log(User)
+    if (playlist) {
       res.status(400).json({ success: false, message: "Playlist da ton tai!" });
     } else {
       const newPlaylist = await create({ owner: User._id, title, thumbnail });
-      User.playList.push(newPlaylist);
+      await User.updateOne({ $push: { playList: newPlaylist } });
+      // await playList.updateOne({ $pull: { listSong: songId } });
       return res.status(200).json(newPlaylist);
     }
+    // console.log(User.playList)
   } catch (error) {
     console.error(error);
   }
@@ -157,6 +160,29 @@ module.exports = {
     } catch (error) {
       console.log(error);
       return res.status(400).send("Chi sua duoc playlist cua ban!");
+    }
+  },
+
+  getPlaylistByUser: async (req, res) => {
+    const { _id } = req.user;
+    // console.log(_id);
+    try {
+      const User = await user
+        .findOne({ _id: _id })
+        .populate({
+          path: "playList",
+          populate: { path: "listSong", model: "songs" },
+        });
+      // console.log("🚀 ~ file: playList.controller.js:171 ~ getPlaylistByUser:async ~ User:", User)
+      // console.log(User)
+      // const playLists = await Playlists.find({owner: user._id})
+      res.status(200).json({
+        playLists: User.playList,
+        User: User.username,
+      });
+    } catch (error) {
+      console.log(error);
+      res.status(500).json(error);
     }
   },
 };

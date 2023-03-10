@@ -1,19 +1,45 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { BsFillPlayCircleFill, BsFillBackspaceFill } from 'react-icons/bs';
 import { IoMdAddCircle } from 'react-icons/io';
 import { FaTimesCircle } from 'react-icons/fa';
 import { BsThreeDots } from 'react-icons/bs';
 import { Context } from '../../components/store/Context';
 import { FiEdit2 } from 'react-icons/fi';
-import { BiDotsVerticalRounded } from 'react-icons/bi';
+import playlistsApi from '../../axiosClient/api/playlists.js';
+import { useLocation } from 'react-router-dom';
 
 export default function Playlist() {
   const [state, dispatch] = useContext(Context);
   const [showModal, setShowModal] = useState(false);
+  const [playlists, setPlaylists] = useState([]);
+  const [title, setTitle] = useState('');
+  const [description, setDescription] = useState('');
+  // const location = useLocation();
+  // console.log(location)
 
   const handleOnClick = (e) => {
     console.log(e);
   };
+  const modal = () => setShowModal(false);
+  const handleSubmit = async () => {
+    const data = {};
+    data.title = title;
+    data.description = description;
+    try {
+      const res = await playlistsApi.createPlayList(data)
+    } catch (err) {
+      console.log(err)
+    }
+  };
+  useEffect(() => {
+    const getPlaylistByUser = async () => {
+      const res = await playlistsApi.getPlaylistByUser();
+      setPlaylists(res.data.playLists);
+      // console.log('🚀 ~ file: index.jsx:21 ~ getPlaylistByUser ~ res:', res);
+      // console.log(res.data.playLists)
+    };
+    getPlaylistByUser();
+  }, []);
 
   return (
     <React.Fragment>
@@ -69,23 +95,12 @@ export default function Playlist() {
                         id="inputImg"
                         className="absolute opacity-0 -z-[1]"
                       />
-                      {
-                        // <div
-                        //   className="flex items-center justify-center group absolute bg-transparent
-                        // h-[50%] w-12 top-1/4 -translate-y-1/2 right-[200px] z-50"
-                        // >
-                        //   <button
-                        //     // onClick={c}
-                        //     className="invisible group-hover:visible bg-[#d9d5d5] p-1 rounded-full"
-                        //   >
-                        //     <BiDotsVerticalRounded />
-                        //   </button>
-                        // </div>
-                      }
                     </div>
 
                     <div className="flex gap-3 flex-col justify-around items-center">
                       <textarea
+                        value={title}
+                        onChange={(e) => setTitle(e.target.value)}
                         id="title"
                         rows="2"
                         className="block p-2.5 w-full text-sm resize-none outline-none 
@@ -93,6 +108,8 @@ export default function Playlist() {
                         placeholder="Nhập tiêu đề..."
                       ></textarea>
                       <textarea
+                        value = {description}
+                        onChange={(e) => setDescription(e.target.value)}
                         id="message"
                         rows="4"
                         className="block p-2.5 w-full text-sm resize-none outline-none
@@ -107,14 +124,17 @@ export default function Playlist() {
                   <button
                     className="text-red-500 background-transparent font-bold uppercase px-6 py-2 text-sm outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
                     type="button"
-                    onClick={() => setShowModal(false)}
+                    onClick={modal}
                   >
                     Đóng
                   </button>
                   <button
                     className="bg-emerald-500 text-white active:bg-emerald-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
                     type="button"
-                    onClick={() => setShowModal(false)}
+                    onClick={() => {
+                      modal();
+                      handleSubmit();
+                    }}
                   >
                     Thêm
                   </button>
@@ -128,50 +148,48 @@ export default function Playlist() {
 
       {state.user ? (
         <div className="flex gap-4 flex-wrap py-4 justify-start w-full">
-          {Array(20)
-            .fill(0)
-            .map((s, i) => (
+          {playlists.map((p, i) => (
+            <div
+              key={i}
+              data-id={i}
+              className="w-[calc(20%-1rem)]"
+              onContextMenu={(e) => {
+                e.preventDefault();
+                handleOnClick(p);
+              }}
+            >
               <div
                 key={i}
-                data-id={i}
-                className="w-[calc(20%-1rem)]"
-                onContextMenu={(e) => {
-                  e.preventDefault();
-                  handleOnClick(s);
-                }}
-              >
-                <div
-                  key={i}
-                  className="
+                className="
                     mx-auto 
                     bg-[url(https://bloganchoi.com/wp-content/uploads/2021/01/am-nhac-hay.jpg)] 
                     w-[200px] group relative rounded-xl transition-all duration-500 hover:scale-105 h-60 bg-cover"
-                >
-                  <div className="w-full h-full group-hover:backdrop-brightness-90 rounded-xl"></div>
-                  <div
-                    className="absolute invisible group-hover:visible -bottom-52 group-hover:bottom-10 transition-all 
+              >
+                <div className="w-full h-full group-hover:backdrop-brightness-90 rounded-xl"></div>
+                <div
+                  className="absolute invisible group-hover:visible -bottom-52 group-hover:bottom-10 transition-all 
                     duration-500 p-4 flex gap-4 left-1/2 -translate-x-1/2 justify-center"
-                  >
-                    <FaTimesCircle
-                      color="white"
-                      className="text-[28px] hover:scale-150 cursor-pointer"
-                      title="Xóa"
-                    />
-                    <BsFillPlayCircleFill
-                      color="white"
-                      className="text-[28px] hover:scale-150 cursor-pointer"
-                      title="Phát"
-                    />
-                    <BsThreeDots
-                      color="white"
-                      className="text-[28px] hover:scale-150 cursor-pointer"
-                      title="Chỉnh sửa"
-                    />
-                  </div>
+                >
+                  <FaTimesCircle
+                    color="white"
+                    className="text-[28px] hover:scale-150 cursor-pointer"
+                    title="Xóa"
+                  />
+                  <BsFillPlayCircleFill
+                    color="white"
+                    className="text-[28px] hover:scale-150 cursor-pointer"
+                    title="Phát"
+                  />
+                  <BsThreeDots
+                    color="white"
+                    className="text-[28px] hover:scale-150 cursor-pointer"
+                    title="Chỉnh sửa"
+                  />
                 </div>
-                <p className="mt-2 font-bold text-center">Đây là playlist</p>
               </div>
-            ))}
+              <p className="mt-2 font-bold text-center">{p.title}</p>
+            </div>
+          ))}
         </div>
       ) : (
         <div>you are not logged in</div>

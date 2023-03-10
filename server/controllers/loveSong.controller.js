@@ -40,7 +40,7 @@ module.exports = {
       const user = await User.findById(_id).populate("loveSong");
       // console.log(user)
       if (user._id.toString() === _id) {
-        console.log(user._id)
+        console.log(user._id);
         try {
           await user.updateOne({ $pull: { loveSong: songId } });
           // `updateOne()` => xóa ròi cập nhật lại playlist
@@ -56,6 +56,25 @@ module.exports = {
       }
     } catch (error) {
       console.log(error);
+    }
+  },
+
+  getLoveSongByUser: async (req, res) => {
+    const { _id } = req.user;
+    try {
+      // const user = await User.findOne({_id}).populate("loveSong");
+      const user = await User.findOne({ _id }).populate({
+        path: "loveSong",
+        populate: { path: "artist", model: "songs" },
+      });
+      // console.log(user)
+      res.status(200).json({
+        lovesong: user.loveSong,
+        User: user.username,
+      });
+    } catch (error) {
+      console.log(error);
+      res.status(500).json(error);
     }
   },
 };
