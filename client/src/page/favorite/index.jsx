@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import { BiHeartCircle } from 'react-icons/bi';
-import { RiUserVoiceLine } from 'react-icons/ri';
+import { RiHeartAddLine, RiUserVoiceLine } from 'react-icons/ri';
+import { Link } from 'react-router-dom'
 import {
   BsDot,
   BsFillPauseCircleFill,
@@ -36,13 +37,14 @@ export default function Favorite() {
   const [isMouseKeep, setIsMouseKeep] = useState(false);
 
   const songRef = useRef(null); // chỉ sử dụng giá trị khởi tạo(null) trong lần dầu tiên
-                                // luôn return object có properties -> current 
-                                // (MUỐN LẤY GIÁ TRỊ PHẢI .current)
+  // luôn return object có properties -> current
+  // (MUỐN LẤY GIÁ TRỊ PHẢI .current)
   useEffect(() => {
     const getLoveSongByUser = async () => {
       const res = await loveSongApi.getLoveSongByUser();
       setLoveSongs(res.data.lovesong);
-      console.log('🚀 ~ file: index.jsx:23 ~ getLoveSongByUser ~ res:', res);
+      console.log('🚀 ~ file: index.jsx:  23 ~ getLoveSongByUser ~ res:', res);
+      // console.log(state)
     };
     getLoveSongByUser();
   }, []);
@@ -56,7 +58,8 @@ export default function Favorite() {
     const x = setInterval(() => {
       if (isPlay && songRef) {
         setCurrentTime((prev) => {
-          if (prev < Math.round(songDuration)) return prev + 1; //Math.round() => làm tròn
+          if (prev < Math.round(songDuration))
+            return prev + 1; //Math.round() => làm tròn
           else return prev;
         });
       }
@@ -119,89 +122,106 @@ export default function Favorite() {
                 {state.user.data.User.displayName}
               </p>
               <RxDot className="mt-1" />
-              <p className="text-sm">3 bài hát</p>
+              <p className="text-sm">{state.user.data.User.loveSong.length} bài hát</p>
             </div>
           </div>
-
-          <div className="relative overflow-x-auto">
-            <table className="w-full text-left ">
-              <thead className="text-lg">
-                <tr>
-                  <th scope="col" className="px-6 py-3">
-                    #
-                  </th>
-                  <th scope="col" className="px-6 py-3">
-                    Bài hát
-                  </th>
-                  <th scope="col" className="px-6 py-3">
-                    Nghệ sĩ
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                {loveSongs.map((l, i) => (
-                  <tr
-                    className={`border-b ${
-                      l && selectedSong && l._id === selectedSong._id
-                        ? 'bg-[#aee9c5]'
-                        : 'transparent '
-                    } hover:bg-[#aee9c5] group`}
-                    key={i}
-                  >
-                    <th scope="row" className="px-6 py-2">
-                      <div className="flex items-center">
-                        <div className="visible group-hover:invisible">
-                          {i + 1}
-                        </div>
-                        <div className="bg-transparent -translate-x-5 right-0 z-50">
-                          {l && selectedSong && l._id === selectedSong._id ? (
-                            <button
-                              onClick={() => {
-                                onSongClick(l);
-                              }}
-                            >
-                              <BsFillPauseCircleFill
-                                className="invisible group-hover:visible"
-                                size="2rem"
-                              />
-                            </button>
-                          ) : (
-                            <button
-                              onClick={() => {
-                                onSongClick(l);
-                              }}
-                            >
-                              <HiPlay
-                                className="invisible group-hover:visible"
-                                size="2rem"
-                              />
-                            </button>
-                          )}
-                        </div>
-                      </div>
+          {state.user.data.User.loveSong.length === 0 ? (
+            <div className="flex flex-col justify-between items-center">
+              <div className="text-3xl font-bold text-purple mb-4">
+                Bạn chưa có bài hát yêu thích nào
+              </div>
+              <div className="font-bold text-purple mb-4">
+                Hãy lưu bài hát bằng cách nhắn vào biểu tượng trái tim
+              </div>
+              <div className='border border-black rounded-xl'>
+                <Link to= "/" className="flex items-center p-2">
+                  <RiHeartAddLine className='mr-1'/>
+                  <p>Thêm bài hát</p>
+                </Link>
+              </div>
+            </div>
+          ) : (
+            <div className="relative overflow-x-auto">
+              <table className="w-full text-left ">
+                <thead className="text-lg">
+                  <tr>
+                    <th scope="col" className="px-6 py-3">
+                      #
                     </th>
-                    <td className="px-6 py-2">
-                      <div className="flex items-center">
-                        <img
-                          src={l.thumbnail}
-                          alt=""
-                          className="w-[35px] h-[35px] rounded-lg mr-2"
-                        />
-                        {l.name}
-                      </div>
-                    </td>
-                    <td className="px-6 py-2">Madihu</td>
-                    <td className="px-6 py-2">
-                      <BsHeartFill
-                        className="cursor-pointer"
-                        title="Xóa khỏi mục yêu thích"
-                      />
-                    </td>
+                    <th scope="col" className="px-6 py-3">
+                      Bài hát
+                    </th>
+                    <th scope="col" className="px-6 py-3">
+                      Nghệ sĩ
+                    </th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+                </thead>
+                <tbody>
+                  {loveSongs.map((l, i) => (
+                    <tr
+                      className={`border-b ${
+                        l && selectedSong && l._id === selectedSong._id
+                          ? 'bg-[#aee9c5]'
+                          : 'transparent '
+                      } hover:bg-[#aee9c5] group`}
+                      key={i}
+                    >
+                      <th scope="row" className="px-6 py-2">
+                        <div className="flex items-center">
+                          <div className="visible group-hover:invisible">
+                            {i + 1}
+                          </div>
+                          <div className="bg-transparent -translate-x-5 right-0 z-50">
+                            {l && selectedSong && l._id === selectedSong._id ? (
+                              <button
+                                onClick={() => {
+                                  onSongClick(l);
+                                }}
+                              >
+                                <BsFillPauseCircleFill
+                                  className="invisible group-hover:visible"
+                                  size="2rem"
+                                />
+                              </button>
+                            ) : (
+                              <button
+                                onClick={() => {
+                                  onSongClick(l);
+                                }}
+                              >
+                                <HiPlay
+                                  className="invisible group-hover:visible"
+                                  size="2rem"
+                                />
+                              </button>
+                            )}
+                          </div>
+                        </div>
+                      </th>
+                      <td className="px-6 py-2">
+                        <div className="flex items-center">
+                          <img
+                            src={l.thumbnail}
+                            alt=""
+                            className="w-[35px] h-[35px] rounded-lg mr-2"
+                          />
+                          {l.name}
+                        </div>
+                      </td>
+                      <td className="px-6 py-2">Madihu</td>
+                      <td className="px-6 py-2">
+                        <BsHeartFill
+                          className="cursor-pointer"
+                          title="Xóa khỏi mục yêu thích"
+                        />
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
+
           {selectedSong ? (
             <div
               className=" h-20 flex items-center border

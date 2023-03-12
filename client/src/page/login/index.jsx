@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { Link, Navigate, useNavigate } from 'react-router-dom';
 import axiosClient from '../../axiosClient';
 // import { Input } from '../register';
@@ -9,15 +9,17 @@ import { MdError } from 'react-icons/md';
 import LogoHeader from '../../images/LogoHeader.png';
 import { AiFillGoogleCircle } from 'react-icons/ai';
 import { FaFacebookSquare } from 'react-icons/fa';
+import { Context } from '../../components/store/Context';
 
 export default function Login() {
   const navigate = useNavigate();
   const [success, setSuccess] = useState(false);
+  // const [state, dispatch] = useContext(Context)
   const handleSubmit = async (e) => {
     e.preventDefault();
     const username = e.target.username.value;
     const password = e.target.password.value;
-
+    
     try {
       const res = await axiosClient.post('/auth/login', {
         username,
@@ -26,7 +28,9 @@ export default function Login() {
       console.log(res);
       const token = res.data.accessToken;
       localStorage.setItem('accessToken', token);
-      toast.success('Đăng nhập thành công!', {
+
+      if(username === 'Admin'){
+        toast.success('Đăng nhập thành công!', {
         position: 'top-right',
         autoClose: 500,
         hideProgressBar: false,
@@ -37,9 +41,25 @@ export default function Login() {
         theme: 'colored',
         duration: 1000,
         onClose: () => {
-          navigate('/', { replace: true });
+          navigate('/admin', { replace: true });
         },
       });
+      } else{
+        toast.success('Đăng nhập thành công!', {
+          position: 'top-right',
+          autoClose: 500,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: 'colored',
+          duration: 1000,
+          onClose: () => {
+            navigate('/', { replace: true });
+          },
+        });
+      }
     } catch (error) {
       setSuccess(true);
       console.error(error);

@@ -26,9 +26,9 @@ export default function Playlist() {
     data.title = title;
     data.description = description;
     try {
-      const res = await playlistsApi.createPlayList(data)
+      const res = await playlistsApi.createPlayList(data);
     } catch (err) {
-      console.log(err)
+      console.log(err);
     }
   };
   useEffect(() => {
@@ -36,7 +36,7 @@ export default function Playlist() {
       const res = await playlistsApi.getPlaylistByUser();
       setPlaylists(res.data.playLists);
       // console.log('🚀 ~ file: index.jsx:21 ~ getPlaylistByUser ~ res:', res);
-      // console.log(res.data.playLists)
+      // console.log(state.user.data.User.playList.length)
     };
     getPlaylistByUser();
   }, []);
@@ -108,7 +108,7 @@ export default function Playlist() {
                         placeholder="Nhập tiêu đề..."
                       ></textarea>
                       <textarea
-                        value = {description}
+                        value={description}
                         onChange={(e) => setDescription(e.target.value)}
                         id="message"
                         rows="4"
@@ -145,54 +145,66 @@ export default function Playlist() {
           <div className="opacity-25 fixed inset-0 z-40 bg-black"></div>
         </div>
       ) : null}
-
-      {state.user ? (
-        <div className="flex gap-4 flex-wrap py-4 justify-start w-full">
-          {playlists.map((p, i) => (
-            <div
-              key={i}
-              data-id={i}
-              className="w-[calc(20%-1rem)]"
-              onContextMenu={(e) => {
-                e.preventDefault();
-                handleOnClick(p);
-              }}
-            >
-              <div
-                key={i}
-                className="
-                    mx-auto 
-                    bg-[url(https://bloganchoi.com/wp-content/uploads/2021/01/am-nhac-hay.jpg)] 
-                    w-[200px] group relative rounded-xl transition-all duration-500 hover:scale-105 h-60 bg-cover"
-              >
-                <div className="w-full h-full group-hover:backdrop-brightness-90 rounded-xl"></div>
-                <div
-                  className="absolute invisible group-hover:visible -bottom-52 group-hover:bottom-10 transition-all 
-                    duration-500 p-4 flex gap-4 left-1/2 -translate-x-1/2 justify-center"
-                >
-                  <FaTimesCircle
-                    color="white"
-                    className="text-[28px] hover:scale-150 cursor-pointer"
-                    title="Xóa"
-                  />
-                  <BsFillPlayCircleFill
-                    color="white"
-                    className="text-[28px] hover:scale-150 cursor-pointer"
-                    title="Phát"
-                  />
-                  <BsThreeDots
-                    color="white"
-                    className="text-[28px] hover:scale-150 cursor-pointer"
-                    title="Chỉnh sửa"
-                  />
-                </div>
-              </div>
-              <p className="mt-2 font-bold text-center">{p.title}</p>
-            </div>
-          ))}
+      {state.user.data.User.playList.length === 0 ? (
+        <div className="flex flex-col items-center absolute top-1/2 left-[40%] -mt-12 -ml-12">
+          <div className="text-3xl font-bold text-purple mb-4">
+            Bạn chưa có Playlist nào
+          </div>
+          <div className="font-bold text-purple mb-4">
+            Hãy tạo để thưởng thức
+          </div>
         </div>
       ) : (
-        <div>you are not logged in</div>
+        <div>
+          {state.user ? (
+            <div className="flex gap-4 flex-wrap py-4 justify-start w-full">
+              {playlists.map((p, i) => (
+                <div
+                  key={i}
+                  data-id={i}
+                  className="w-[calc(20%-1rem)]"
+                  onContextMenu={(e) => {
+                    e.preventDefault();
+                    handleOnClick(p);
+                  }}
+                >
+                  <div
+                    key={i}
+                    className="
+                      mx-auto 
+                      bg-[url(https://bloganchoi.com/wp-content/uploads/2021/01/am-nhac-hay.jpg)] 
+                      w-[200px] group relative rounded-xl transition-all duration-500 hover:scale-105 h-60 bg-cover"
+                  >
+                    <div className="w-full h-full group-hover:backdrop-brightness-90 rounded-xl"></div>
+                    <div
+                      className="absolute invisible group-hover:visible -bottom-52 group-hover:bottom-10 transition-all 
+                      duration-500 p-4 flex gap-4 left-1/2 -translate-x-1/2 justify-center"
+                    >
+                      <FaTimesCircle
+                        color="white"
+                        className="text-[28px] hover:scale-150 cursor-pointer"
+                        title="Xóa"
+                      />
+                      <BsFillPlayCircleFill
+                        color="white"
+                        className="text-[28px] hover:scale-150 cursor-pointer"
+                        title="Phát"
+                      />
+                      <BsThreeDots
+                        color="white"
+                        className="text-[28px] hover:scale-150 cursor-pointer"
+                        title="Chỉnh sửa"
+                      />
+                    </div>
+                  </div>
+                  <p className="mt-2 font-bold text-center">{p.title}</p>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div>you are not logged in</div>
+          )}
+        </div>
       )}
     </React.Fragment>
   );
