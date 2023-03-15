@@ -20,7 +20,7 @@ import { MdSkipNext } from 'react-icons/md';
 import { IoMdSkipBackward } from 'react-icons/io';
 import { BsHeartFill } from 'react-icons/bs';
 import { HiPlay } from 'react-icons/hi';
-import { Context } from '../../components/store/Context';
+import { Context } from '../../store/Context';
 import loveSongApi from '../../axiosClient/api/loveSong';
 
 export default function Favorite() {
@@ -44,7 +44,7 @@ export default function Favorite() {
       const res = await loveSongApi.getLoveSongByUser();
       setLoveSongs(res.data.lovesong);
       console.log('🚀 ~ file: index.jsx:  23 ~ getLoveSongByUser ~ res:', res);
-      // console.log(state)
+      console.log(state)
     };
     getLoveSongByUser();
   }, []);

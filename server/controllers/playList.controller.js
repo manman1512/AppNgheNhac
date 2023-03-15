@@ -2,6 +2,7 @@ const Playlists = require("../models/playList.model");
 const user = require("../models/user.model");
 const Songs = require("../models/song.model");
 const { ZingMp3 } = require("zingmp3-api-full");
+const { getSongLink } = require("../utils/getSongLink");
 
 async function create({ owner, title, thumbnail = "null", song = [] }) {
   const newPlaylist = await Playlists.create({
@@ -171,11 +172,13 @@ module.exports = {
         .findOne({ _id: _id })
         .populate({
           path: "playList",
-          populate: { path: "listSong", model: "songs" },
+          // populate: { path: "listSong", model: "songs" },
         });
       // console.log("🚀 ~ file: playList.controller.js:171 ~ getPlaylistByUser:async ~ User:", User)
       // console.log(User)
       // const playLists = await Playlists.find({owner: user._id})
+      const songs = User.playList.listSong;
+      User.playlist.listSong = await getSongLink(songs);
       res.status(200).json({
         playLists: User.playList,
         User: User.username,

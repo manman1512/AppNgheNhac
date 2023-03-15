@@ -9,7 +9,7 @@ import { MdError } from 'react-icons/md';
 import LogoHeader from '../../images/LogoHeader.png';
 import { AiFillGoogleCircle } from 'react-icons/ai';
 import { FaFacebookSquare } from 'react-icons/fa';
-import { Context } from '../../components/store/Context';
+import { Context } from '../../store/Context';
 
 export default function Login() {
   const navigate = useNavigate();

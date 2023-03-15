@@ -1,6 +1,7 @@
 const songs = require("../models/song.model");
 const User = require("../models/user.model");
 const { ZingMp3 } = require("zingmp3-api-full");
+const { getSongLink } = require("../utils/getSongLink");
 
 module.exports = {
   addLoveSongById: async (req, res) => {
@@ -65,9 +66,11 @@ module.exports = {
       // const user = await User.findOne({_id}).populate("loveSong");
       const user = await User.findOne({ _id }).populate({
         path: "loveSong",
-        populate: { path: "artist", model: "songs" },
+        // populate: {path: "artist"}
       });
-      // console.log(user)
+      
+      user.loveSong = await getSongLink(user.loveSong);
+      // console.log(user.loveSong);
       res.status(200).json({
         lovesong: user.loveSong,
         User: user.username,

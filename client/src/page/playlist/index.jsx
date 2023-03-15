@@ -3,7 +3,7 @@ import { BsFillPlayCircleFill, BsFillBackspaceFill } from 'react-icons/bs';
 import { IoMdAddCircle } from 'react-icons/io';
 import { FaTimesCircle } from 'react-icons/fa';
 import { BsThreeDots } from 'react-icons/bs';
-import { Context } from '../../components/store/Context';
+import { Context } from "../../store/Context";
 import { FiEdit2 } from 'react-icons/fi';
 import playlistsApi from '../../axiosClient/api/playlists.js';
 import { useLocation } from 'react-router-dom';

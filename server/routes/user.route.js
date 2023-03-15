@@ -18,7 +18,7 @@ router.get("/getById/:id", getById);
 router.get("/getMe", getMe);
 router.get("/getImages", getImages);
 router.post("/addImage", addImage);
-router.get("/getUsername/:username", getUsername);
+// router.get("/getUsername/:username", getUsername);
 // router.post("/addPlayList", addPlayList);
 
 module.exports = router;

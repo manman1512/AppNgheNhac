@@ -73,8 +73,8 @@ export default function Dashboard() {
           speed="1000"
         >
           {images.map((i, index) => (
-            <div className="slide h-[400px] mt-3">
-              <img alt="" src={i} key={index} className="rounded-xl p-2" />
+            <div key={index} className="slide h-[400px] mt-3">
+              <img alt="" src={i}  className="rounded-xl p-2" />
             </div>
           ))}
         </Carousel>

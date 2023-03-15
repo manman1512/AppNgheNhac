@@ -10,20 +10,21 @@ import {
 } from './page';
 import Layout from './components/layout';
 import { useContext, useEffect } from 'react';
-import { Context } from './components/store/Context';
+import { Context } from './store/Context';
 import axiosClient from './axiosClient';
 import usersApi from './axiosClient/api/users';
-import { setUser } from './components/store/Action';
+import { setUser } from './store/Action';
 import Admin from './components/admin';
 function App() {
   const [state, dispatch] = useContext(Context);
   useEffect(() => {
     const token = window.localStorage.getItem('accessToken');
-    // console.log(token);
+    console.log(token);
     if (token !== null) {
       (async () => {
-        const user = await usersApi.getMe();
-        dispatch(setUser(user));
+        const response = await usersApi.getMe();
+        console.log(response.data.User);
+        dispatch(setUser(response.data.User));
       })();
     }
   }, []);

@@ -5,7 +5,7 @@ import { RiPlayListFill } from 'react-icons/ri';
 import { CiLogout } from 'react-icons/ci';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import Logoo from '../../images/Logooo.png';
-import { Context } from '../store/Context.js';
+import { Context } from '../../store/Context.js';
 export default function Navigation({ className }) {
   const iconSize = '1.5rem';
   const bgColor = '#27AE60';

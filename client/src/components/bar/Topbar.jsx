@@ -1,26 +1,30 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { BiUserCircle } from 'react-icons/bi';
 import { CiLogout } from 'react-icons/ci';
-import {MdOutlineArrowDropDown} from 'react-icons/md'
+import { MdOutlineArrowDropDown } from 'react-icons/md';
 import { Link } from 'react-router-dom';
 import usersApi from '../../axiosClient/api/users.js';
-import { setUser } from '../store/Action.js';
-import { Context } from '../store/Context.js';
+import { setUser } from '../../store/Action.js';
+import { Context } from '../../store/Context.js';
 import Logoo from '../../images/LogoHeader.png';
 import { HiOutlineSearch } from 'react-icons/hi';
 
 export default function Topbar() {
   const [state, dispatch] = useContext(Context);
+  const [file, setFile] = useState(null);
+
+  const PF = process.env.REACT_APP_SERVER_URL;
+  console.log(state);
   useEffect(() => {
     const token = window.localStorage.getItem('accessToken');
-    // console.log(token);
     if (token !== null) {
       (async () => {
-        const user = await usersApi.getMe();
-        dispatch(setUser(user));
+        // const user = await usersApi.getMe();
+        // dispatch(setUser(user));
+        // // console.log(state);
+        // console.log(state.user._id);
       })();
     }
-    console.log(state.user);
   }, []);
 
   const handleLogout = (e) => {
@@ -72,13 +76,17 @@ export default function Topbar() {
           >
             <img
               className="w-[35px] h-[35px] rounded-full object-cover cursor-pointer"
-              src="https://picsum.photos/40"
+              src={
+                state.user.profilePic
+                  ? `${PF}/images/${state.user.profilePic}`
+                  : 'https://picsum.photos/40'
+              }
               alt=""
             />
             <p className="ml-1 mr-1 truncate font-bold text-white">
-              {state.user.data.User.displayName}
+              {state.user.displayName}
             </p>
-            <MdOutlineArrowDropDown color='white' size="1.5rem"/>
+            <MdOutlineArrowDropDown color="white" size="1.5rem" />
             <div className=" absolute invisible group-hover:visible w-40 ">
               <div
                 className="bg-[white] mt-36 p-2 relative mr-5 rounded-lg "
