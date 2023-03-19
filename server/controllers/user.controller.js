@@ -6,13 +6,19 @@ module.exports = {
   //UPDATE
   update: async (req, res) => {
     const { _id } = req.user;
-    const { password, displayName } = req.body;
-    console.log("🚀 ~ file: user.controller.js:10 ~ update: ~ password:", password)
+    const { passwordOld, password, displayName } = req.body;
+    const User = await user.findById(_id)
+    const passswordValid = await argon2.verify(User.password, passwordOld)
+
     if (!req.body.password) {
       delete req.body.password;
     }
-    
-      if (password === "" || !password) {
+    if (!passswordValid) {
+      return res.status(400).json({
+        message: "password cu khong dung!",
+      });
+    }
+    if (password === "" || !password || passwordOld === "") {
       // console.log(123)
       // console.log(_id)
       const updateUser = await user.findByIdAndUpdate(
@@ -22,8 +28,11 @@ module.exports = {
         },
         { new: true }
       );
-      console.log("🚀 ~ file: user.controller.js:25 ~ update: ~ updateUser:", updateUser)
-      res.status(200).json({
+      // console.log(
+      //   "🚀 ~ file: user.controller.js:25 ~ update: ~ updateUser:",
+      //   updateUser
+      // );
+      return res.status(200).json({
         success: "true",
         message: "Cap nhat thanh cong!",
         updateUser,
@@ -40,7 +49,7 @@ module.exports = {
           { new: true }
         );
 
-        res.status(200).json({
+        return res.status(200).json({
           success: "true",
           message: "Cap nhat thanh cong!",
           updateUser,
@@ -50,6 +59,7 @@ module.exports = {
         res.status(500).json({ success: false, message: "Loi Server!" });
       }
     }
+    
   },
 
   //GET USER
@@ -65,12 +75,13 @@ module.exports = {
       res.status(500).json(error);
     }
   },
+
   // GET ME
   getMe: async (req, res) => {
     const { _id } = req.user;
     try {
       const User = await user.findById(_id);
-      
+
       if (User) {
         res.status(200).json({ success: true, User });
       } else {
@@ -83,6 +94,7 @@ module.exports = {
       res.status(500).json(error);
     }
   },
+
   getImages: async (req, res) => {
     const { _id } = req.user;
     try {
@@ -99,12 +111,13 @@ module.exports = {
       res.status(500).json(error);
     }
   },
+
   addImage: async (req, res) => {
     const { _id } = req.user;
     const { image } = req.body;
     try {
       const User = await user.findById(_id);
-      console.log()
+      console.log();
       if (User) {
         User.images.push(image);
         await User.save();
@@ -118,6 +131,21 @@ module.exports = {
       res.status(200).json(error);
     }
   },
+
+  // validate passwowrd
+  // validatePass: async (req, res) =>{
+  //   const {password} = req.body;
+  //   const passswordValid = await argon2.verify(user.password, password)
+  //   if (!passswordValid){
+  //     return res
+  //       .status(400)
+  //       .json({ success: false, message: 'Password cu khong dung!' });
+  //   }else{
+  //     return res
+  //       .status(200)
+  //       .json({ success: false, message: 'Password cu dung!' });
+  //   }
+  // }
 
   // get username
   // getUsername: async (req, res) => {

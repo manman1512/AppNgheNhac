@@ -10,6 +10,7 @@ const {
   addImage,
   getUsername,
   addPlayList,
+  // validatePass
 } = require("../controllers/user.controller");
 
 router.put("/update", update);
@@ -18,6 +19,7 @@ router.get("/getById/:id", getById);
 router.get("/getMe", getMe);
 router.get("/getImages", getImages);
 router.post("/addImage", addImage);
+// router.post("/validatePass", validatePass)
 // router.get("/getUsername/:username", getUsername);
 // router.post("/addPlayList", addPlayList);
 

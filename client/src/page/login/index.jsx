@@ -10,16 +10,19 @@ import LogoHeader from '../../images/LogoHeader.png';
 import { AiFillGoogleCircle } from 'react-icons/ai';
 import { FaFacebookSquare } from 'react-icons/fa';
 import { Context } from '../../store/Context';
+import usersApi from '../../axiosClient/api/users';
+import { setUser } from '../../store/Action';
 
 export default function Login() {
   const navigate = useNavigate();
   const [success, setSuccess] = useState(false);
+  const [state, dispatch] = useContext(Context);
   // const [state, dispatch] = useContext(Context)
   const handleSubmit = async (e) => {
     e.preventDefault();
     const username = e.target.username.value;
     const password = e.target.password.value;
-    
+
     try {
       const res = await axiosClient.post('/auth/login', {
         username,
@@ -28,9 +31,7 @@ export default function Login() {
       console.log(res);
       const token = res.data.accessToken;
       localStorage.setItem('accessToken', token);
-
-      if(username === 'Admin'){
-        toast.success('Đăng nhập thành công!', {
+      toast.success('Đăng nhập thành công!', {
         position: 'top-right',
         autoClose: 500,
         hideProgressBar: false,
@@ -40,26 +41,16 @@ export default function Login() {
         progress: undefined,
         theme: 'colored',
         duration: 1000,
-        onClose: () => {
-          navigate('/admin', { replace: true });
+        onClose: async () => {
+          try {
+            const response = await usersApi.getMe();
+            dispatch(setUser(response.data.User));
+            navigate('/', { replace: true });
+          } catch (error) {
+            console.log(error);
+          }
         },
       });
-      } else{
-        toast.success('Đăng nhập thành công!', {
-          position: 'top-right',
-          autoClose: 500,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: 'colored',
-          duration: 1000,
-          onClose: () => {
-            navigate('/', { replace: true });
-          },
-        });
-      }
     } catch (error) {
       setSuccess(true);
       console.error(error);
@@ -99,7 +90,7 @@ export default function Login() {
                 <i>hoặc</i>
               </div>
               <div className="flex flex-col">
-                <label for="username" className="font-bold">
+                <label htmlFor="username" className="font-bold">
                   Tên đăng nhập
                 </label>
                 <input
@@ -109,7 +100,7 @@ export default function Login() {
                   className="wrap-input relative w-96 h-12 outline-none py-0 px-6 text-lg border 
                   border-black rounded-lg mt-2 mb-2"
                 />
-                <label for="password" className="font-bold">
+                <label htmlFor="password" className="font-bold">
                   Mật khẩu
                 </label>
                 <input

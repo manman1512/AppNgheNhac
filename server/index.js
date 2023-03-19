@@ -24,7 +24,8 @@ const MONGO_URI = process.env.ATLAS_URI;
 const PORT = process.env.PORT || 2023;
 
 (async () => {
-    try {
+  try {
+      await mongoose.set("strictQuery", false);
       await mongoose.connect(MONGO_URI);
       console.log('Connect database successfully!');
     } catch (error) {

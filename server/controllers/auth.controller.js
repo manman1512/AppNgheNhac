@@ -54,6 +54,7 @@ module.exports = {
     }
     try {
       const User = await user.findOne({username})
+      // console.log(User)
       if(!User)
           return res
           .status(400)

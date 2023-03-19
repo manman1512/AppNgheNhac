@@ -40,7 +40,7 @@ export default function Playlist() {
     };
     getPlaylistByUser();
   }, []);
-
+  
   return (
     <React.Fragment>
       <div className="flex items-center w-full z-[1000] p-4">
@@ -145,7 +145,7 @@ export default function Playlist() {
           <div className="opacity-25 fixed inset-0 z-40 bg-black"></div>
         </div>
       ) : null}
-      {state.user.data.User.playList.length === 0 ? (
+      {state.user.playList.length === 0 ? (
         <div className="flex flex-col items-center absolute top-1/2 left-[40%] -mt-12 -ml-12">
           <div className="text-3xl font-bold text-purple mb-4">
             Bạn chưa có Playlist nào

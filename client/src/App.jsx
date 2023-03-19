@@ -6,7 +6,6 @@ import {
   Dashboard,
   Favorite,
   Playlist,
-  Setting,
 } from './page';
 import Layout from './components/layout';
 import { useContext, useEffect } from 'react';
@@ -14,7 +13,7 @@ import { Context } from './store/Context';
 import axiosClient from './axiosClient';
 import usersApi from './axiosClient/api/users';
 import { setUser } from './store/Action';
-import Admin from './components/admin';
+
 function App() {
   const [state, dispatch] = useContext(Context);
   useEffect(() => {
@@ -23,10 +22,11 @@ function App() {
     if (token !== null) {
       (async () => {
         const response = await usersApi.getMe();
-        console.log(response.data.User);
+        // console.log(response.data.User);
         dispatch(setUser(response.data.User));
       })();
     }
+    console.log(state)
   }, []);
 
   return (
@@ -36,9 +36,7 @@ function App() {
           <Route index element={<Dashboard />} />
           <Route path="favorite" element={<Favorite />} />
           <Route path="/playlist" element={<Playlist />} />
-          <Route path="/setting" element={<Setting />} />
         </Route>
-        <Route path="/admin" element={<Admin />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
       </Routes>

@@ -13,7 +13,7 @@ const userSchema = new Schema(
     },
     password: {
       type: String,
-      select: false,
+      // select: false,
       require: true,
     },
     passwordConfirm: {

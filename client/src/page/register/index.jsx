@@ -154,7 +154,7 @@ export default function Register() {
                   </div>
                 </div>
               ) : (
-                <></>
+                <div></div>
               )}
 
               <label htmlFor="username" className="font-bold">
@@ -174,7 +174,7 @@ export default function Register() {
                   </div>
                 </div>
               ) : (
-                <></>
+                <div></div>
               )}
 
               <label htmlFor="password" className="font-bold">
@@ -195,7 +195,7 @@ export default function Register() {
                   </div>
                 </div>
               ) : (
-                <></>
+                <div></div>
               )}
 
               <label htmlFor="passwordConfirm" className="font-bold">
@@ -215,7 +215,7 @@ export default function Register() {
                   </div>
                 </div>
               ) : (
-                <></>
+                <div></div>
               )}
 
               {success && (

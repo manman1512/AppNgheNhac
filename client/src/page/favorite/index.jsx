@@ -24,6 +24,7 @@ import { Context } from '../../store/Context';
 import loveSongApi from '../../axiosClient/api/loveSong';
 
 export default function Favorite() {
+  
   const [state, dispatch] = useContext(Context);
   const [loveSongs, setLoveSongs] = useState([]);
   const [selectedSong, setSelectedSong] = useState(null);
@@ -35,6 +36,7 @@ export default function Favorite() {
   const [mute, setMute] = useState(false);
   const [tempVolume, setTempVolume] = useState(volume);
   const [isMouseKeep, setIsMouseKeep] = useState(false);
+  const PF = process.env.REACT_APP_SERVER_URL;
 
   const songRef = useRef(null); // chỉ sử dụng giá trị khởi tạo(null) trong lần dầu tiên
   // luôn return object có properties -> current
@@ -115,17 +117,21 @@ export default function Favorite() {
             <div className="ml-20 flex items-center">
               <img
                 className="w-[35px] h-[35px] rounded-full object-cover cursor-pointer"
-                src="https://picsum.photos/40"
+                src={
+                  state.user.profilePic
+                    ? `${PF}/images/${state.user.profilePic}`
+                    : 'https://picsum.photos/40'
+                }
                 alt=""
               />
               <p className="ml-1 truncate font-bold">
-                {state.user.data.User.displayName}
+                {state.user.displayName}
               </p>
               <RxDot className="mt-1" />
-              <p className="text-sm">{state.user.data.User.loveSong.length} bài hát</p>
+              <p className="text-sm">{state.user.loveSong.length} bài hát</p>
             </div>
           </div>
-          {state.user.data.User.loveSong.length === 0 ? (
+          {state.user.loveSong.length === 0 ? (
             <div className="flex flex-col justify-between items-center">
               <div className="text-3xl font-bold text-purple mb-4">
                 Bạn chưa có bài hát yêu thích nào
@@ -378,7 +384,8 @@ export default function Favorite() {
                       />
                     </button>
                   )}{' '}
-                  <div className=" bg-gray-50 shadow-xl invisible group-hover:visible p-1 flex py-2 rounded-lg -left-2/3 translate-x-2 -top-8 -translate-y-3/4 -rotate-90 absolute">
+                  <div className=" bg-gray-50 shadow-xl invisible group-hover:visible p-1 flex py-2 
+                  rounded-lg -left-2/3 translate-x-2 -top-8 -translate-y-3/4 -rotate-90 absolute">
                     <input
                       value={volume}
                       onChange={(e) => {
@@ -392,8 +399,9 @@ export default function Favorite() {
                         }
                       }}
                       type="range"
-                      className=" accent-gray-300 w-20 h-1 form-range focus:outline-none focus:ring-0 focus:shadow-none
-              bg-gray-200 rounded-lg appearance-none cursor-pointer range-sm dark:bg-gray-700"
+                      className=" accent-gray-300 w-20 h-1 form-range focus:outline-none focus:ring-0 
+                      focus:shadow-none bg-gray-200 rounded-lg appearance-none cursor-pointer range-sm
+                      dark:bg-gray-700"
                     />
                   </div>
                 </div>

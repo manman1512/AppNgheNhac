@@ -25,17 +25,6 @@ export default function Setting() {
   }, [state.user]);
 
   useEffect(() => {
-    const token = window.localStorage.getItem('accessToken');
-    if (token !== null) {
-      (async () => {
-        const user = await usersApi.getMe();
-        dispatch(setUser(user));
-        console.log(state);
-      })();
-    }
-  }, []);
-
-  useEffect(() => {
     console.log(file);
   }, [file]);
 
@@ -45,6 +34,7 @@ export default function Setting() {
     const updateUser = {
       userId: state.user._id,
       displayName,
+      password
     };
     if (file) {
       const data = new FormData();
@@ -145,9 +135,6 @@ export default function Setting() {
               <button
                 className=" cursor-pointer rounded-md p-1 mt-5 w-96 border bg-[#F5F5F6]
                 border-black hover:bg-blue-300 active:bg-blue-200"
-                rounded-lg
-                border
-                border-black
                 type="submit"
               >
                 Cập nhật
