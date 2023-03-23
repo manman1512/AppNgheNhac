@@ -7,8 +7,14 @@ const playlistsApi = {
   getPlaylistByUser: async () => {
     return await axiosClient.get('/playlists/getPlaylistByUser');
   },
+  getPlaylistById: async (data) => {
+    return await axiosClient.get('playlists/getPlaylistById/' + data)
+  },
+
   createPlayList: async (data) => {
-    return await axiosClient.post('/playlists/createPlayList' + data);
+    return await axiosClient.post('/playlists/create',data,{
+      headers: { 'content-type': 'multipart/form-data' }
+    });
   },
 };
 

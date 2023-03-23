@@ -15,7 +15,8 @@ const loveSongRouter = require('./routes/loveSong.route')
 const multer = require('multer');
 const path = require('path');
 
-const userModel = require("./models/user.model")
+const userModel = require("./models/user.model");
+const playListModel = require('./models/playList.model');
 
 const app = express();
 const server = http.createServer(app);
@@ -50,10 +51,11 @@ const PORT = process.env.PORT || 2023;
     destination: (req, file, cb) => {
       cb(null, './images');
     },
-    filename: (req, file, cb) => {
+    filename: (req, file, cb, ) => {
       // const name = req.body.name.replaceAll(' ', '%20');
       // console.log(name);
-      cb(null, req.body.name);
+      console.log(req.body)
+      cb(null, req.body.fileName);
       // req.body = name;
     },
   });
@@ -63,33 +65,43 @@ const PORT = process.env.PORT || 2023;
   app.use('/api/auth', authRouter)
   app.use('/api/songs', songRouter)
   app.use(middleware);
-  // app.post('/api/upload', upload.single('file'), async (req, res) => {
-  //   try {
-  //     const { _id } = req.user;
-  //     const { name } = req.body;
-  //     const user = await userModel.findById(_id);
-  //     if (user) {
-  //       user.images.push(name);
-  //       await user.save();
-  //       res.status(200).json({ success: true, image: name });
-  //     } else {
-  //       res.status(404).json({ success: false, message: 'User khong ton tai!' });
-  //     }
-  //   } catch (error) {
-  //     console.log(error);
-  //     res.status(500).json(error);
-  //   }
-  // });
+  
+  app.post('/api/playlists/create', upload.single('file'), async (req, res) => {
+    try {
+      const { _id } = req.user;
+      const { fileName, title, description } = req.body;
+      console.log("🚀 ~ file: index.js:74 ~ app.post ~ fileName:", fileName)
+      const user = await userModel.findById(_id);
+      if (user) {
+        const newPlaylist = await playListModel.create({
+          owner: user,
+          title,
+          description,
+          thumbnail: fileName
+        })
+        await newPlaylist.save();
+        user.playList.push(newPlaylist)
+        await user.save();
+        // await user.save();
+        res.status(200).json({ success: true, image: fileName });
+      } else {
+        res.status(404).json({ success: false, message: 'User khong ton tai!' });
+      }
+    } catch (error) {
+      console.log(error);
+      res.status(500).json(error);
+    }
+  });
 
   app.post('/api/upload/avatar', upload.single('file'), async (req, res) => {
     try {
       const { _id } = req.user;
-      const { name } = req.body;
+      const { fileName } = req.body;
       const user = await userModel.findById(_id);
       if (user) {
-        user.profilePic = name;
+        user.profilePic = fileName;
         await user.save();
-        res.status(200).json({ success: true, image: name });
+        res.status(200).json({ success: true, image: fileName });
       } else {
         res.status(404).json({ success: false, message: 'User khong ton tai!' });
       }

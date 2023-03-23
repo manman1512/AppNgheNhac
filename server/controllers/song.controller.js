@@ -1,5 +1,5 @@
 const songs = require("../models/song.model");
-const user = require("../models/user.model")
+const user = require("../models/user.model");
 const { ZingMp3 } = require("zingmp3-api-full");
 
 module.exports = {
@@ -15,12 +15,15 @@ module.exports = {
     }
   },
 
-  // add song on system
-  addSong: async (req, res) => {
-    
+  // GET ALL SONG
+  getAllSong: async (req, res) => {
+    const allSongs = await songs.find();
+    const first15Songs = allSongs.slice(20, 30);
+    res.status(200).json(first15Songs);
   },
 
-
+  // ADD SONG BY ADMIN
+  addSong: async (req, res) => {},
 
   getHomeMp3: async (req, res) => {
     try {

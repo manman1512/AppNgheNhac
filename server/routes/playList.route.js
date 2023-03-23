@@ -7,7 +7,8 @@ const {
   deletePlayListById,
   deleteSongById,
   updatePlayListById,
-  getPlaylistByUser
+  getPlaylistByUser,
+  getPlaylistById
 } = require("../controllers/playList.controller");
 
 router.post("/createPlayList", createPlayList);
@@ -16,6 +17,7 @@ router.delete("/deletePlayListById/:playListId", deletePlayListById);
 router.delete('/deleteSongById/:playListId/:songId', deleteSongById)
 router.patch('/updatePlayListById/:playListId', updatePlayListById)
 router.get('/getPlaylistByUser', getPlaylistByUser)
+router.get('/getPlaylistById/:idPlaylist', getPlaylistById)
 // router.get("/getTop100/:id", getTop100);
 // router.get("/getPlaylist", getPlaylist)
 module.exports = router;

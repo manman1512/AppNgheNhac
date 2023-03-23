@@ -29,6 +29,7 @@ export default function Setting() {
   }, [file]);
 
   const handleSubmit = async (e) => {
+    console.log("man an cu")
     e.preventDefault();
     dispatch({ type: 'UPDATE_START' });
     const updateUser = {
@@ -39,8 +40,9 @@ export default function Setting() {
     if (file) {
       const data = new FormData();
       const fileName = Date.now() + file.name;
-      data.append('name', fileName);
+      data.append('fileName', fileName);
       data.append('file', file);
+      console.log("🚀 ~ file: index.jsx:41 ~ handleSubmit ~ data:", data)
       updateUser.profilePic = fileName;
       try {
         const response = await usersApi.updateAvatar(data);

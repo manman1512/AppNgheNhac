@@ -7,23 +7,25 @@ const playlistsschema = new Schema(
       type: String,
       require: true,
     },
+    description: {
+      type: String,
+    },
     thumbnail: {
       type: String,
-
     },
     owner: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "User"
+      ref: "User",
     },
-    listSong:[
+    listSong: [
       {
         type: Schema.Types.ObjectId,
-        ref: "songs"
-      }
+        ref: "songs",
+      },
     ],
-    
+
     // numOfItems: 0,
   },
   { timestamps: true }
 );
-module.exports = mongoose.model('Playlist', playlistsschema);
+module.exports = mongoose.model("Playlist", playlistsschema);

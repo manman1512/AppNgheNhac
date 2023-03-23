@@ -6,9 +6,9 @@ module.exports = {
   //UPDATE
   update: async (req, res) => {
     const { _id } = req.user;
-    const { passwordOld, password, displayName } = req.body;
-    const User = await user.findById(_id)
-    const passswordValid = await argon2.verify(User.password, passwordOld)
+    const { passwordOld, password } = req.body;
+    const User = await user.findById(_id);
+    const passswordValid = await argon2.verify(User.password, passwordOld);
 
     if (!req.body.password) {
       delete req.body.password;
@@ -18,9 +18,33 @@ module.exports = {
         message: "password cu khong dung!",
       });
     }
-    if (password === "" || !password || passwordOld === "") {
-      // console.log(123)
-      // console.log(_id)
+    try {
+      const hashedPass = await argon2.hash(password);
+      const updateUser = await user.findByIdAndUpdate(
+        _id,
+        {
+          password: hashedPass,
+        },
+        { new: true }
+      );
+
+      return res.status(200).json({
+        success: "true",
+        message: "Cap nhat thanh cong!",
+        updateUser,
+      });
+    } catch (error) {
+      console.log(error);
+      res.status(500).json({ success: false, message: "Loi Server!" });
+    }
+  },
+
+  updateDisplayName: async (req, res) => {
+    const { _id } = req.user;
+    const { displayName } = req.body;
+    // const User = await user.findById(_id);
+
+    try {
       const updateUser = await user.findByIdAndUpdate(
         _id,
         {
@@ -28,38 +52,15 @@ module.exports = {
         },
         { new: true }
       );
-      // console.log(
-      //   "🚀 ~ file: user.controller.js:25 ~ update: ~ updateUser:",
-      //   updateUser
-      // );
       return res.status(200).json({
         success: "true",
         message: "Cap nhat thanh cong!",
         updateUser,
       });
-    } else {
-      try {
-        const hashedPass = await argon2.hash(password);
-        const updateUser = await user.findByIdAndUpdate(
-          _id,
-          {
-            password: hashedPass,
-            displayName,
-          },
-          { new: true }
-        );
-
-        return res.status(200).json({
-          success: "true",
-          message: "Cap nhat thanh cong!",
-          updateUser,
-        });
-      } catch (error) {
-        console.log(error);
-        res.status(500).json({ success: false, message: "Loi Server!" });
-      }
+    } catch (error) {
+      console.log(error);
+      res.status(500).json({ success: false, message: "Loi Server!" });
     }
-    
   },
 
   //GET USER

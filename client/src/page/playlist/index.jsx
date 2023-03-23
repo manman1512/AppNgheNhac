@@ -1,19 +1,22 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useId, useState } from 'react';
 import { BsFillPlayCircleFill, BsFillBackspaceFill } from 'react-icons/bs';
 import { IoMdAddCircle } from 'react-icons/io';
 import { FaTimesCircle } from 'react-icons/fa';
 import { BsThreeDots } from 'react-icons/bs';
-import { Context } from "../../store/Context";
+import { Context } from '../../store/Context';
 import { FiEdit2 } from 'react-icons/fi';
 import playlistsApi from '../../axiosClient/api/playlists.js';
 import { useLocation } from 'react-router-dom';
+import Playlist from './playlist';
 
-export default function Playlist() {
+export default function Playlists() {
   const [state, dispatch] = useContext(Context);
   const [showModal, setShowModal] = useState(false);
   const [playlists, setPlaylists] = useState([]);
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
+  const [image, setImage] = useState(null);
+  const _id = useId();
   // const location = useLocation();
   // console.log(location)
 
@@ -22,25 +25,33 @@ export default function Playlist() {
   };
   const modal = () => setShowModal(false);
   const handleSubmit = async () => {
-    const data = {};
-    data.title = title;
-    data.description = description;
+    const formData = new FormData()
+    formData.append("title", title);
+    formData.append("description", description)
+    formData.append("fileName", image.name.split(".")[0] + Date.now())
+    formData.append("file", image)
+    console.log("🚀 ~ file: index.jsx:29 ~ handleSubmit ~ formData:", formData)
+   
     try {
-      const res = await playlistsApi.createPlayList(data);
+      const res = await playlistsApi.createPlayList(formData);
+      console.log("🚀 ~ file: index.jsx:36 ~ handleSubmit ~ res:", res)
     } catch (err) {
       console.log(err);
     }
   };
+  useEffect(()=>{
+    console.log(image)
+  },[image])
   useEffect(() => {
     const getPlaylistByUser = async () => {
       const res = await playlistsApi.getPlaylistByUser();
       setPlaylists(res.data.playLists);
-      // console.log('🚀 ~ file: index.jsx:21 ~ getPlaylistByUser ~ res:', res);
+      console.log('🚀 ~ file: index.jsx:21 ~ getPlaylistByUser ~ res:', res);
       // console.log(state.user.data.User.playList.length)
     };
     getPlaylistByUser();
   }, []);
-  
+
   return (
     <React.Fragment>
       <div className="flex items-center w-full z-[1000] p-4">
@@ -87,10 +98,17 @@ export default function Playlist() {
                         className="flex flex-col items-center justify-center 
                       mb-2 cursor-pointer text-sm"
                       >
-                        <FiEdit2 className="" />
-                        Chọn ảnh
+                        
+                        {image ? <div className="w-40 h-40 bg-contain bg-no-repeat" style={{
+                          backgroundImage: `url(${URL.createObjectURL(image)})`
+                        }}>
+
+                          </div>:<React.Fragment><FiEdit2 className="" /><p>Chon anh</p></React.Fragment>}
                       </label>
                       <input
+                        onChange={e=>{
+                          setImage(e.target.files[0]);
+                        }}
                         type="file"
                         id="inputImg"
                         className="absolute opacity-0 -z-[1]"
@@ -145,7 +163,8 @@ export default function Playlist() {
           <div className="opacity-25 fixed inset-0 z-40 bg-black"></div>
         </div>
       ) : null}
-      {state.user.playList.length === 0 ? (
+
+      {state.user && state.user.playList.length === 0 ? (
         <div className="flex flex-col items-center absolute top-1/2 left-[40%] -mt-12 -ml-12">
           <div className="text-3xl font-bold text-purple mb-4">
             Bạn chưa có Playlist nào
@@ -155,56 +174,20 @@ export default function Playlist() {
           </div>
         </div>
       ) : (
-        <div>
-          {state.user ? (
-            <div className="flex gap-4 flex-wrap py-4 justify-start w-full">
-              {playlists.map((p, i) => (
-                <div
-                  key={i}
-                  data-id={i}
-                  className="w-[calc(20%-1rem)]"
-                  onContextMenu={(e) => {
-                    e.preventDefault();
-                    handleOnClick(p);
-                  }}
-                >
-                  <div
-                    key={i}
-                    className="
-                      mx-auto 
-                      bg-[url(https://bloganchoi.com/wp-content/uploads/2021/01/am-nhac-hay.jpg)] 
-                      w-[200px] group relative rounded-xl transition-all duration-500 hover:scale-105 h-60 bg-cover"
-                  >
-                    <div className="w-full h-full group-hover:backdrop-brightness-90 rounded-xl"></div>
-                    <div
-                      className="absolute invisible group-hover:visible -bottom-52 group-hover:bottom-10 transition-all 
-                      duration-500 p-4 flex gap-4 left-1/2 -translate-x-1/2 justify-center"
-                    >
-                      <FaTimesCircle
-                        color="white"
-                        className="text-[28px] hover:scale-150 cursor-pointer"
-                        title="Xóa"
-                      />
-                      <BsFillPlayCircleFill
-                        color="white"
-                        className="text-[28px] hover:scale-150 cursor-pointer"
-                        title="Phát"
-                      />
-                      <BsThreeDots
-                        color="white"
-                        className="text-[28px] hover:scale-150 cursor-pointer"
-                        title="Chỉnh sửa"
-                      />
-                    </div>
-                  </div>
-                  <p className="mt-2 font-bold text-center">{p.title}</p>
-                </div>
-              ))}
-            </div>
-          ) : (
-            <div>you are not logged in</div>
-          )}
-        </div>
+          <div className="flex gap-4 flex-wrap py-4 justify-start w-full">
+            {playlists.map((playlist, index) => (
+              <Playlist
+                key={index}
+                data-id={index}
+                playlist={playlist}
+                className="w-[calc(20%-1rem)]"
+                // onContextMenu={(e) => {
+                //   e.preventDefault();
+                //   handleOnClick(playlist);
+                // }}
+              />
+            ))}
+          </div>
       )}
     </React.Fragment>
   );

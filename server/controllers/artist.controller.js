@@ -7,10 +7,9 @@ module.exports = {
   getArtist: (req, res) => {
     const { name } = req.params;
     try {
-      // console.log(artist);
       const artist = artists.filter((a) => a.name.toLowerCase().includes(name));
+      console.log(artist);
       res.status(200).json(artist);
-      // console.log(artist[0].id);
     } catch (error) {
       console.log(error);
     }

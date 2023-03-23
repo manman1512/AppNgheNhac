@@ -7,6 +7,9 @@ import {
   Favorite,
   Playlist,
 } from './page';
+
+import DetailPlaylist from './page/playlist/detailPlaylist'
+
 import Layout from './components/layout';
 import { useContext, useEffect } from 'react';
 import { Context } from './store/Context';
@@ -36,6 +39,7 @@ function App() {
           <Route index element={<Dashboard />} />
           <Route path="favorite" element={<Favorite />} />
           <Route path="/playlist" element={<Playlist />} />
+          <Route path="/playlist/:playlistId" element={<DetailPlaylist />} />
         </Route>
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
