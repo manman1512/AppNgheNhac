@@ -57,10 +57,11 @@ export default function Dashboard() {
             </div>
           )}
           renderArrowPrev={(c, n, l) => (
-            <div className="flex items-center justify-center group absolute bg-transparent h-[50%] w-12 top-1/2 -translate-y-1/2 left-0 z-50">
+            <div className="flex items-center justify-center group absolute bg-transparent 
+            h-[50%] w-12 top-1/2 -translate-y-1/2 left-0 z-50">
               <button
                 onClick={c}
-                className="invisible group-hover:visible bg-[#777777] opacity-75 p-2 rounded-full "
+                className="invisible group-hover:visible bg-[#777777] opacity-75 p-2 rounded-full"
               >
                 <IoIosArrowBack size="22px" color="white" className='' />
               </button>
