@@ -30,4 +30,15 @@ function updateAvatar(img){
     }
 }
 
-export {setUser, updateStart, updateSuccess, updateFailure, updateAvatar}
+function setSelectedSong(selectedSong){
+    return{
+        type: "SET_SELECTED_SONG",
+        payload: selectedSong
+    }
+}
+function togglePlay(){
+    return {
+        type: "TOGGLE_PLAY"
+    }
+}
+export {setUser, updateStart, updateSuccess, updateFailure, updateAvatar, setSelectedSong, togglePlay}

@@ -9,10 +9,14 @@ const {
   getArtist,
   getListSongByArtist,
   getArtistMP3,
-  getListArtistSongMP3
+  getListArtistSongMP3,
+  getArtistById
 } = require("../controllers/artist.controller");
+
 router.get("/getArtist/:name", getArtist);
+router.get("/getArtistById/:idArtist", getArtistById)
 router.get("/getListSongByArtist/:id", getListSongByArtist);
+
 router.get("/getArtistMP3/:name", getArtistMP3);
 router.get("/getListArtistSongMP3/:id", getListArtistSongMP3);
 

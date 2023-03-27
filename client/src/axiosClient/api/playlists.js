@@ -16,6 +16,10 @@ const playlistsApi = {
       headers: { 'content-type': 'multipart/form-data' }
     });
   },
+
+  deletePlayListById: async (data)=>{
+    return await axiosClient.delete('playlists/deletePlayListById/'+ data)
+  }
 };
 
 export default playlistsApi;

@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useId, useState } from 'react';
 import { BsFillPlayCircleFill, BsFillBackspaceFill } from 'react-icons/bs';
-import { IoMdAddCircle } from 'react-icons/io';
+import { IoMdAddCircle, IoMdImages } from 'react-icons/io';
 import { FaTimesCircle } from 'react-icons/fa';
 import { BsThreeDots } from 'react-icons/bs';
 import { Context } from '../../store/Context';
@@ -8,6 +8,8 @@ import { FiEdit2 } from 'react-icons/fi';
 import playlistsApi from '../../axiosClient/api/playlists.js';
 import { useLocation } from 'react-router-dom';
 import Playlist from './playlist';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 export default function Playlists() {
   const [state, dispatch] = useContext(Context);
@@ -23,25 +25,42 @@ export default function Playlists() {
   const handleOnClick = (e) => {
     console.log(e);
   };
-  const modal = () => setShowModal(false);
+  const modal = () => {
+    setShowModal(false);
+    setImage(null)
+  };
   const handleSubmit = async () => {
-    const formData = new FormData()
-    formData.append("title", title);
-    formData.append("description", description)
-    formData.append("fileName", image.name.split(".")[0] + Date.now())
-    formData.append("file", image)
-    console.log("🚀 ~ file: index.jsx:29 ~ handleSubmit ~ formData:", formData)
-   
+    const formData = new FormData();
+    formData.append('title', title);
+    formData.append('description', description);
+    formData.append('fileName', image.name.split('.')[0] + Date.now());
+    formData.append('file', image);
+    console.log('🚀 ~ file: index.jsx:29 ~ handleSubmit ~ formData:', formData);
+
     try {
       const res = await playlistsApi.createPlayList(formData);
-      console.log("🚀 ~ file: index.jsx:36 ~ handleSubmit ~ res:", res)
+      console.log('🚀 ~ file: index.jsx:36 ~ handleSubmit ~ res:', res);
+      toast.success('Tạo Playlist thành công!', {
+        position: 'top-right',
+        autoClose: 500,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: 'colored',
+        duration: 1000,
+        onClose: () => {
+          setShowModal(false)
+        },
+      });
     } catch (err) {
       console.log(err);
     }
   };
-  useEffect(()=>{
-    console.log(image)
-  },[image])
+  useEffect(() => {
+    console.log(image);
+  }, [image]);
   useEffect(() => {
     const getPlaylistByUser = async () => {
       const res = await playlistsApi.getPlaylistByUser();
@@ -98,15 +117,25 @@ export default function Playlists() {
                         className="flex flex-col items-center justify-center 
                       mb-2 cursor-pointer text-sm"
                       >
-                        
-                        {image ? <div className="w-40 h-40 bg-contain bg-no-repeat" style={{
-                          backgroundImage: `url(${URL.createObjectURL(image)})`
-                        }}>
-
-                          </div>:<React.Fragment><FiEdit2 className="" /><p>Chon anh</p></React.Fragment>}
+                        {image ? (
+                          <div
+                            className="w-40 h-44 bg-contain bg-no-repeat rounded-xl"
+                            style={{
+                              backgroundImage: `url(${URL.createObjectURL(
+                                image
+                              )})`,
+                              backgroundSize: '100% 100%'
+                            }}
+                          ></div>
+                        ) : (
+                          <React.Fragment>
+                            <IoMdImages size="3rem" color='black' />
+                            <p className='text-black'>Chọn ảnh</p>
+                          </React.Fragment>
+                        )}
                       </label>
                       <input
-                        onChange={e=>{
+                        onChange={(e) => {
                           setImage(e.target.files[0]);
                         }}
                         type="file"
@@ -156,6 +185,7 @@ export default function Playlists() {
                   >
                     Thêm
                   </button>
+                  <ToastContainer className="mt-9" />
                 </div>
               </div>
             </div>
@@ -174,20 +204,20 @@ export default function Playlists() {
           </div>
         </div>
       ) : (
-          <div className="flex gap-4 flex-wrap py-4 justify-start w-full">
-            {playlists.map((playlist, index) => (
-              <Playlist
-                key={index}
-                data-id={index}
-                playlist={playlist}
-                className="w-[calc(20%-1rem)]"
-                // onContextMenu={(e) => {
-                //   e.preventDefault();
-                //   handleOnClick(playlist);
-                // }}
-              />
-            ))}
-          </div>
+        <div className="flex gap-4 flex-wrap py-4 justify-start w-full">
+          {playlists.map((playlist, index) => (
+            <Playlist
+              key={index}
+              data-id={index}
+              playlist={playlist}
+              className="w-[calc(20%-1rem)]"
+              // onContextMenu={(e) => {
+              //   e.preventDefault();
+              //   handleOnClick(playlist);
+              // }}
+            />
+          ))}
+        </div>
       )}
     </React.Fragment>
   );

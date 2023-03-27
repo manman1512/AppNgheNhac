@@ -69,10 +69,11 @@ module.exports = {
         // populate: {path: "artist"}
       });
       
-      user.loveSong = await getSongLink(user.loveSong);
-      // console.log(user.loveSong);
+      const loveSong = await getSongLink(user.loveSong);
+      console.log("🚀 ~ file: loveSong.controller.js:73 ~ getLoveSongByUser: ~ loveSong:", loveSong)
+      
       res.status(200).json({
-        lovesong: user.loveSong,
+        lovesong: loveSong,
         User: user.username,
       });
     } catch (error) {

@@ -80,9 +80,14 @@ export default function Topbar() {
         progress: undefined,
         theme: 'colored',
         duration: 1000,
+        onClose: () => {
+          setShowModal(false)
+        },
       });
       console.log(res);
       dispatch({ type: 'UPDATE_SUCCESS', payload: res.data.updateUser });
+     
+
     } catch (error) {
       console.log(error);
       dispatch({ type: 'UPDATE_FAILURE' });
@@ -116,6 +121,9 @@ export default function Topbar() {
         progress: undefined,
         theme: 'colored',
         duration: 1000,
+        onClose: () => {
+          setShowModalPass(false)
+        },
       });
       console.log(res);
       dispatch({ type: 'UPDATE_SUCCESS', payload: res.data.updateUser });
@@ -159,15 +167,15 @@ export default function Topbar() {
 
   return (
     <div
-      className=" h-16  flex items-center
-      w-auto sticky top-0 font-sanspx-2 z-[99999] border-b border-[#e5e5e5]"
+      className=" h-16  flex items-center 
+      w-auto sticky top-0 font-sanspx-2 z-[1] border-b border-[#e5e5e5]"
     >
       <Link to="/" className=" font-semibold items-center flex">
         <img className="w-[55px] h-[55px] items-center" src={Logoo} alt="" />
         <p className="  text-2xl ">SongSphere</p>
       </Link>
 
-      <div className="relative w-96 mx-auto">
+      <div className="relative w-[28rem] mx-auto">
         <input
           type="search"
           className="block p-2 w-full z-20 rounded-3xl
@@ -177,8 +185,8 @@ export default function Topbar() {
         <button
           type="submit"
           className="absolute top-0 right-0 p-2.5
-             bg-[#f4f3f3] rounded-r-3xl border border-gray-500
-             focus:outline-none  dark:bg-[#f4f3f3]
+              rounded-r-3xl border border-gray-500
+             focus:outline-none  dark:bg-[#AEE9C5]
              "
         >
           <svg

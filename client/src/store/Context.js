@@ -5,6 +5,10 @@ const INITIAL_STATE = {
   user: null,
   isFetching: false,
   error: false,
+  player: {
+    selectedSong: null,
+    isPlay: false,
+  }
 };
 
 export const Context = createContext(null);

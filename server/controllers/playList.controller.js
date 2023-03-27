@@ -4,7 +4,13 @@ const Songs = require("../models/song.model");
 const { ZingMp3 } = require("zingmp3-api-full");
 const { getSongLink } = require("../utils/getSongLink");
 
-async function create({ owner, title, description, thumbnail = "null", song = [] }) {
+async function create({
+  owner,
+  title,
+  description,
+  thumbnail = "null",
+  song = [],
+}) {
   const newPlaylist = await Playlists.create({
     owner,
     title,
@@ -32,7 +38,12 @@ const createPlayList = async (req, res) => {
         .status(400)
         .json({ success: false, message: "Playlist da ton tai!" });
     } else {
-      const newPlaylist = await create({ owner: User._id, title, thumbnail, description });
+      const newPlaylist = await create({
+        owner: User._id,
+        title,
+        thumbnail,
+        description,
+      });
       await User.updateOne({ $push: { playList: newPlaylist } });
       // await playList.updateOne({ $pull: { listSong: songId } });
       return res.status(200).json(newPlaylist);
@@ -51,6 +62,7 @@ module.exports = {
   addSongById: async (req, res) => {
     const { playListId, songId } = req.params;
     const { _id } = req.user;
+    console.log(songId)
     try {
       const playList = await Playlists.findById(playListId).populate("owner");
       const exist = await Playlists.findById(playListId);
@@ -65,10 +77,10 @@ module.exports = {
           return res.json({ msg: "Bai hat da ton tai" });
         console.log(exist.listSong.includes(song._id));
         // exist.save();
-        // console.log(song)
+        console.log(song)
         exist.listSong.push(song);
         exist.save();
-        res.json({ msg: "Them bai hat thanh cong" });
+        res.json({ msg: "Them bai hat thanh cong" , song});
       } else {
         res.status(401).json("Chi Them duoc playlist cua ban!");
       }
@@ -201,13 +213,18 @@ module.exports = {
         // populate: { path: "listSong", model: "songs" },
       });
 
-      const Playlist = await Playlists.findById(idPlaylist)
-      const songs = User.playList[0].listSong; //User.playList[0].listSong.length
-      User.playList[0].listSong = await getSongLink(songs);
-
+      const playlist = await Playlists.findById(idPlaylist).populate("listSong");
+      // const songs = User.playList[0].listSong; //User.playList[0].listSong.length
+      const songs = playlist.listSong.map(({_id, id, artist}) => ({
+        _id,
+        id,
+        artist
+      }))
+      const listSong = await getSongLink(playlist.listSong);
+      playlist.listSong = listSong
       res.status(200).json({
-        playLists: Playlist,
-        User: User.username,
+        playlist,
+        listSong
       });
     } catch (error) {
       console.log(error);

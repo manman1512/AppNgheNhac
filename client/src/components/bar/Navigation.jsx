@@ -77,17 +77,6 @@ export default function Navigation({ className }) {
   return (
     <div className={`${className} `}>
       <div className="flex flex-col gap-2 justify-center items-center ">
-        {
-          // <div className=" font-semibold items-center flex flex-col mb-6">
-          //   <img
-          //     className="w-[85px] h-[85px] items-center"
-          //     src={Logoo}
-          //     alt=""
-          //   />
-          //   <p className=" text-white text-2xl font-mono ">SongSphere</p>
-          // </div>
-        }
-
         <div className="items-center justify-around flex flex-col  w-full gap-2">
           <div
             user-label="home"
@@ -100,18 +89,6 @@ export default function Navigation({ className }) {
               <p className="ml-2 font-bold">Trang Chủ</p>
             </Link>
           </div>
-          {
-          //   <div
-          //   onMouseOver={_onMouseOver}
-          //   onMouseOut={_onMouseOut}
-          //   className={`navigate p-2 rounded-[14px] w-full flex justify-between `}
-          // >
-          //   <Link className="flex">
-          //     <BiSearch size={iconSize} />
-          //     <p className="ml-2 font-bold">Tìm Kiếm</p>
-          //   </Link>
-          // </div>
-          }
           {state.user ? (
             <div
               user-label="playlist"
@@ -166,7 +143,6 @@ export default function Navigation({ className }) {
         </div>
       </div>
       {
-        
         // {state.user && (
         //   <div className="flex items-center flex-col relative">
         //     <div className="mb-5 w-full flex justify-between">

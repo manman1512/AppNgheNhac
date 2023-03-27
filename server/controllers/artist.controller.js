@@ -1,4 +1,5 @@
 const artists = require("../data/artist.json");
+const Artists = require("../models/artist.model")
 const fs = require("fs");
 const path = require("path");
 const { ZingMp3 } = require("zingmp3-api-full");
@@ -10,6 +11,24 @@ module.exports = {
       const artist = artists.filter((a) => a.name.toLowerCase().includes(name));
       console.log(artist);
       res.status(200).json(artist);
+    } catch (error) {
+      console.log(error);
+    }
+  },
+
+  getArtistById: async (req, res) => {
+    const { idArtist } = req.params;
+    console.log(idArtist);
+    try {
+      const artist = await Artists.findById(idArtist);
+      if (artist) {
+        console.log(artist);
+        return res.status(200).json(artist);
+      } else {
+        return res.status(400).json({
+          message: "Khoong tim thasy!",
+        });
+      }
     } catch (error) {
       console.log(error);
     }

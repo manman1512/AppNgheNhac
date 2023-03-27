@@ -5,6 +5,7 @@ const {getSong, getAllSong, getHomeMp3, getSongMP3} = require('../controllers/so
 
 router.get('/getSong/:id', getSong)
 router.get('/getAllSong', getAllSong)
+
 router.get('/getSongMP3/:id', getSongMP3)
 router.get('/getHomeMp3', getHomeMp3)
 

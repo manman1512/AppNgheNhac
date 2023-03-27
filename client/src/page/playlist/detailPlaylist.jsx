@@ -5,37 +5,48 @@ import { Context } from '../../store/Context';
 import { format } from 'date-fns';
 import {
   BsFileEarmarkMusic,
+  BsFillPauseCircleFill,
   BsFillPlayCircleFill,
   BsHeartFill,
   BsThreeDots,
 } from 'react-icons/bs';
 import { TiDeleteOutline } from 'react-icons/ti';
+import { AiOutlineHeart } from 'react-icons/ai';
 import songsApi from '../../axiosClient/api/songs';
 import { RxDot } from 'react-icons/rx';
+import { FiEdit2 } from 'react-icons/fi';
+import { IoIosAdd } from 'react-icons/io';
+import { HiPlay } from 'react-icons/hi';
+import RenderListSong from '../../components/RenderListSong';
+import EditPlaylist from './EditPlaylist';
+import InfoPlaylist from './InfoPlaylist';
 const moment = require('moment');
 require('moment/locale/vi'); // Load Vietnamese locale
 
 export default function DetailPlaylist() {
   const [state, dispatch] = useContext(Context);
+
   const location = useLocation();
   const path = location.pathname.split('/')[2];
-  // console.log(location);
-  const PF = process.env.REACT_APP_SERVER_URL;
   const [playlist, setPlaylist] = useState([]);
-  const [formattedDate, setFormattedDate] = useState('');
-  const [listSongs, setListSongs] = useState('');
+  const [listSong, setListSong] = useState([]);
   const [suggestSongs, setSuggestsongs] = useState([]);
+  const [showModalEditPlaylist, setShowModalEditPlaylist] = useState(false);
+  const [selectedSong, setSelectedSong] = useState(null);
+  const handleCloseModal = ()=>{
+    setShowModalEditPlaylist(false);
+  }
+  const handleApplyChange = ()=>{
 
+  }
+  const onSongClick = (song) => {
+    setSelectedSong(song);
+  };
   useEffect(() => {
     const getPlaylistByUser = async () => {
       const res = await playlistsApi.getPlaylistById(path);
-      setPlaylist(res.data.playLists);
-      setListSongs(res.data.playLists.listSong);
-      // console.log(res.data.playLists.listSong.length);
-      setFormattedDate(
-        format(new Date(res.data.playLists.updatedAt), 'dd/MM/yyyy')
-      );
-      // console.log(formattedDate);
+      setPlaylist(res.data.playlist);
+      setListSong(res.data.listSong);
     };
     getPlaylistByUser();
   }, [path]);
@@ -43,77 +54,33 @@ export default function DetailPlaylist() {
   useEffect(() => {
     const getAllSong = async () => {
       const songs = await songsApi.getAllSong();
-      console.log(songs);
       setSuggestsongs(songs.data);
     };
     getAllSong();
   }, []);
+  const handleOpenModal = ()=>{
+    setShowModalEditPlaylist(true)
+  }
   return (
     <React.Fragment>
-      <div className="p-7 flex gap-4">
-        <div class="grid grid-rows-3 grid-flow-col gap-4">
-          <div class="">
-            <div
-              style={{
-                backgroundImage: `url(${
-                  playlist.thumbnail
-                    ? `${PF}/images/${playlist.thumbnail}`
-                    : 'https://picsum.photos/200'
-                })`,
-              }}
-              className={`
-              mx-auto bg-center w-80 group relative rounded-xl transition-all duration-500 
-              hover:scale-105 h-80 bg-cover
-              `}
-            >
-              <div className="w-full h-full group-hover:backdrop-brightness-90 rounded-xl"></div>
-              <div
-                className="absolute invisible group-hover:visible -bottom-52 group-hover:bottom-10 transition-all 
-            duration-500 p-4 flex gap-4 left-1/2 -translate-x-1/2 justify-center"
-              >
-                <TiDeleteOutline
-                  color="white"
-                  className="text-[33px] hover:scale-150 cursor-pointer"
-                  title="Xóa"
-                />
-                <BsFillPlayCircleFill
-                  color="white"
-                  className="text-[28px] hover:scale-150 cursor-pointer"
-                  title={playlist.title}
-                />
-                <BsThreeDots
-                  color="white"
-                  className="text-[28px] hover:scale-150 cursor-pointer"
-                  title="Khác"
-                />
-              </div>
-            </div>
-            <div className="flex justify-center flex-col items-center">
-              <div className="mt-2 font-bold text-xl">{playlist?.title}</div>
-              <div className="mt-2 text-sm">Cập nhật: {formattedDate}</div>
-              <div className="flex items-center mt-2">
-                <img
-                  className="w-[35px] h-[35px] rounded-full object-cover cursor-pointer"
-                  src={
-                    state.user?.profilePic
-                      ? `${PF}/images/${state.user.profilePic}`
-                      : 'https://picsum.photos/40'
-                  }
-                  alt=""
-                />
-                <p className="ml-1 truncate font-bold">
-                  {state.user?.displayName}
-                </p>
-                <RxDot className="mt-1" />
-                <p className="text-sm">{ playlist?.listSong?.length} bài hát</p>
-              </div>
-            </div>
-          </div>
+      <div className="p-8 flex gap-8">
+        <div className="gap-4">
+          {
+            state.user && playlist && listSong.length > 0 && <InfoPlaylist playlist={playlist
+            } onOpen={handleOpenModal} length={listSong.length} user={state.user}/>
+          }
+          {showModalEditPlaylist && (
+            <EditPlaylist
+              onApply={handleApplyChange}
+              onClose={handleCloseModal}
+              playlist={playlist}
+            />
+          )}
         </div>
-        {listSongs.length === 0 ? (
-          <div className="flex flex-auto w-auto flex-col gap-7">
+        {listSong.length === 0 ? (
+          <div className="flex flex-auto w-auto flex-col gap-[67px]">
             <div
-              className="flex justify-center items-center flex-col bg-[#AEE9C5] p-10 
+              className="flex justify-center items-center flex-col bg-[#AEE9C5] p-14
             rounded-lg text-white"
             >
               <BsFileEarmarkMusic size="5rem" />
@@ -122,84 +89,42 @@ export default function DetailPlaylist() {
               </p>
             </div>
             <div className="">
-              <div className="font-bold text-lg ml-36 mb-3">Bài hát gợi ý</div>
-              <div className="flex flex-col items-center justify-center">
-                <div>
-                  {suggestSongs.map((s, i) => (
-                    <tr key={i}>
-                      <td className="px-20 py-2">
-                        <div className="flex items-center">
-                          <img
-                            src={s.thumbnail}
-                            alt=""
-                            className="w-[35px] h-[35px] rounded-lg mr-2"
+              <div className="font-bold text-xl mb-3">Bài hát gợi ý</div>
+              <div className="flex flex-col ">
+                <table>
+                  <tbody>
+                    {suggestSongs.map((s, i) => (
+                      <tr key={i} className="">
+                        <td className=" py-2">
+                          <div className="flex items-center">
+                            <img
+                              src={s.thumbnail}
+                              alt=""
+                              className="w-[35px] h-[35px] rounded-lg mr-2"
+                            />
+                            {s.name}
+                          </div>
+                        </td>
+                        <td className="px-24 py-2">Nghe si</td>
+                        <td className="px-24 py-2 visible">
+                          <IoIosAdd
+                            className="cursor-pointer border border-gray-400 rounded-full"
+                            color="black"
+                            size="1.2rem"
+                            title="Thêm vào playlist"
                           />
-                          {s.name}
-                        </div>
-                      </td>
-                      <td className="px-20 py-2">Madihu</td>
-                      <td className="px-20 py-2">
-                        <BsHeartFill
-                          className="cursor-pointer"
-                          title="Xóa khỏi mục yêu thích"
-                        />
-                      </td>
-                    </tr>
-                  ))}
-                </div>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
               </div>
             </div>
           </div>
-        ) : (
-          <div className="relative overflow-x-auto">
-            <table className="w-full text-left ">
-              <thead className="text-lg">
-                <tr>
-                  <th scope="col" className="px-6 py-3">
-                    #
-                  </th>
-                  <th scope="col" className="px-6 py-3">
-                    Bài hát
-                  </th>
-                  <th scope="col" className="px-6 py-3">
-                    Nghệ sĩ
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                {listSongs.map((l, i) => (
-                  <tr key={i}>
-                    <th scope="row" className="px-6 py-2">
-                      <div className="flex items-center">
-                        <div className="visible group-hover:invisible">
-                          {i + 1}
-                        </div>
-                      </div>
-                    </th>
-                    <td className="px-6 py-2">
-                      <div className="flex items-center">
-                        <img
-                          src={l.thumbnail}
-                          alt=""
-                          className="w-[35px] h-[35px] rounded-lg mr-2"
-                        />
-                        {l.name}
-                      </div>
-                    </td>
-                    <td className="px-6 py-2">Madihu</td>
-                    <td className="px-6 py-2">
-                      <BsHeartFill
-                        className="cursor-pointer"
-                        title="Xóa khỏi mục yêu thích"
-                      />
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        )}
-      </div>
+        ) :    
+         <RenderListSong listSong={listSong} onSongClick={onSongClick} selectedSong={selectedSong} />
+      }      
+        </div>
     </React.Fragment>
-  );
+  )
 }

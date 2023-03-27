@@ -18,7 +18,7 @@ module.exports = {
   // GET ALL SONG
   getAllSong: async (req, res) => {
     const allSongs = await songs.find();
-    const first15Songs = allSongs.slice(20, 30);
+    const first15Songs = allSongs.slice(25, 35);
     res.status(200).json(first15Songs);
   },
 

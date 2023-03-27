@@ -30,6 +30,23 @@ const Reducer = (state, action) => {
           profilePic: action.payload
         }
       };
+    case "SET_SELECTED_SONG":
+      return{
+        ...state,
+        player:{
+          ...state.player,
+          selectedSong: action.payload
+        }
+      }
+    case "TOGGLE_PLAY":
+      console.log(state.player.isPlay)
+      return {
+        ...state,
+        player:{
+          ...state.player,
+          isPlay: !state.player.isPlay
+        }
+      }
     default:
       return state;
   }
