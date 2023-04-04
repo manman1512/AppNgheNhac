@@ -54,6 +54,8 @@ export default function Playlists() {
           setShowModal(false)
         },
       });
+      const datas = await playlistsApi.getPlaylistByUser();
+      setPlaylists(datas.data.playLists);
     } catch (err) {
       console.log(err);
     }
@@ -61,6 +63,7 @@ export default function Playlists() {
   useEffect(() => {
     console.log(image);
   }, [image]);
+
   useEffect(() => {
     const getPlaylistByUser = async () => {
       const res = await playlistsApi.getPlaylistByUser();

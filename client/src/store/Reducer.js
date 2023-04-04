@@ -47,6 +47,11 @@ const Reducer = (state, action) => {
           isPlay: !state.player.isPlay
         }
       }
+    case "SET_LIST_SONG":
+      return {
+        ...state,
+        listSong: action.payload
+      }
     default:
       return state;
   }

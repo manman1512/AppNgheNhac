@@ -3,6 +3,8 @@ const artistModel = require("../models/artist.model");
 async function getLink(id){
     // console.log(song)
     const response = await ZingMp3.getSong(id);
+    // console.log("🚀 ~ file: getSongLink.js:6 ~ getLink ~ id:", id)
+    // console.log("🚀 ~ file: getSongLink.js:6 ~ getLink ~ response:", response)
     const link = response.data["128"];
     return link
 }

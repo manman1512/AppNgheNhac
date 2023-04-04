@@ -45,6 +45,7 @@ export default function DetailPlaylist() {
   useEffect(() => {
     const getPlaylistByUser = async () => {
       const res = await playlistsApi.getPlaylistById(path);
+      console.log(res.data.playlist)
       setPlaylist(res.data.playlist);
       setListSong(res.data.listSong);
     };
@@ -60,6 +61,19 @@ export default function DetailPlaylist() {
   }, []);
   const handleOpenModal = ()=>{
     setShowModalEditPlaylist(true)
+  }
+  const handleFavoiteSong = (data)=>{
+    const songs = [...listSong];
+    songs.forEach((song)=>{
+      if(song._id === data._id){
+        if(data.type === "add"){
+          song.isFavorite = true;
+        }else{
+          song.isFavorite = false;
+        }
+      }
+    })
+    setListSong(songs);
   }
   return (
     <React.Fragment>
@@ -122,7 +136,7 @@ export default function DetailPlaylist() {
             </div>
           </div>
         ) :    
-         <RenderListSong listSong={listSong} onSongClick={onSongClick} selectedSong={selectedSong} />
+         <RenderListSong onFavorite={handleFavoiteSong} listSong={listSong} onSongClick={onSongClick} selectedSong={selectedSong} />
       }      
         </div>
     </React.Fragment>

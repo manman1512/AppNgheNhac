@@ -185,12 +185,13 @@ module.exports = {
     try {
       const User = await user.findOne({ _id: _id }).populate({
         path: "playList",
-        // populate: { path: "listSong", model: "songs" },
+        populate: { path: "listSong", model: "songs" },
       });
       // console.log("🚀 ~ file: playList.controller.js:171 ~ getPlaylistByUser:async ~ User:", User)
       // console.log(User)
       // const playLists = await Playlists.find({owner: user._id})
       const songs = User.playList[0].listSong; //User.playList[0].listSong.length
+      // console.log("🚀 ~ file: playList.controller.js:194 ~ getPlaylistByUser: ~ songs:", songs)
       User.playList[0].listSong = await getSongLink(songs);
       res.status(200).json({
         playLists: User.playList,

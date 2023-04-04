@@ -39,6 +39,7 @@ export default function Favorite() {
   const [tempVolume, setTempVolume] = useState(volume);
   const [isMouseKeep, setIsMouseKeep] = useState(false);
   const PF = process.env.REACT_APP_SERVER_URL;
+  const [number, setNumber] = useState('')
 
   const songRef = useRef(null); // chỉ sử dụng giá trị khởi tạo(null) trong lần dầu tiên
   // luôn return object có properties -> current
@@ -49,6 +50,7 @@ export default function Favorite() {
       setLoveSongs(res.data.lovesong);
       console.log('🚀 ~ file: index.jsx:  23 ~ getLoveSongByUser ~ res:', res);
       console.log(state)
+      setNumber(res.data.lovesong.length)
     };
     getLoveSongByUser();
   }, []);
@@ -84,7 +86,7 @@ export default function Favorite() {
                 {state.user.displayName}
               </p>
               <RxDot className="mt-1" />
-              <p className="text-sm">{state.user.loveSong.length} bài hát</p>
+              <p className="text-sm">{number} bài hát</p>
             </div>
           </div>
           {state.user.loveSong.length === 0 ? (
