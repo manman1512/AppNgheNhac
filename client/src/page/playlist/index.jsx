@@ -67,7 +67,8 @@ export default function Playlists() {
   useEffect(() => {
     const getPlaylistByUser = async () => {
       const res = await playlistsApi.getPlaylistByUser();
-      setPlaylists(res.data.playLists);
+      const playlists = res.data.playLists
+      setPlaylists(playlists);
       console.log('🚀 ~ file: index.jsx:21 ~ getPlaylistByUser ~ res:', res);
       // console.log(state.user.data.User.playList.length)
     };

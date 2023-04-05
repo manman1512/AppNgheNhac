@@ -4,6 +4,7 @@ import { BsFillPlayCircleFill, BsThreeDots } from 'react-icons/bs';
 import { RxDot } from 'react-icons/rx';
 import { TiDeleteOutline } from 'react-icons/ti';
 import { Context } from '../../store/Context';
+import { AiOutlineEdit } from 'react-icons/ai';
 
 export default function InfoPlaylist({ playlist, onOpen, length, user }) {
   const PF = process.env.REACT_APP_SERVER_URL;
@@ -37,7 +38,7 @@ export default function InfoPlaylist({ playlist, onOpen, length, user }) {
             title={playlist.title}
           />
 
-          <BsThreeDots
+          <AiOutlineEdit
             color="white"
             className="text-[28px] hover:scale-150 cursor-pointer"
             title="Chỉnh sửa"

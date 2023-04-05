@@ -3,20 +3,11 @@ import { useLocation } from 'react-router-dom';
 import playlistsApi from '../../axiosClient/api/playlists';
 import { Context } from '../../store/Context';
 import { format } from 'date-fns';
-import {
-  BsFileEarmarkMusic,
-  BsFillPauseCircleFill,
-  BsFillPlayCircleFill,
-  BsHeartFill,
-  BsThreeDots,
-} from 'react-icons/bs';
-import { TiDeleteOutline } from 'react-icons/ti';
-import { AiOutlineHeart } from 'react-icons/ai';
+import { BsFileEarmarkMusic } from 'react-icons/bs';
+
 import songsApi from '../../axiosClient/api/songs';
-import { RxDot } from 'react-icons/rx';
-import { FiEdit2 } from 'react-icons/fi';
+
 import { IoIosAdd } from 'react-icons/io';
-import { HiPlay } from 'react-icons/hi';
 import RenderListSong from '../../components/RenderListSong';
 import EditPlaylist from './EditPlaylist';
 import InfoPlaylist from './InfoPlaylist';
@@ -28,26 +19,30 @@ export default function DetailPlaylist() {
 
   const location = useLocation();
   const path = location.pathname.split('/')[2];
-  const [playlist, setPlaylist] = useState([]);
+  // const [playlist, setPlaylist] = useState([]);
   const [listSong, setListSong] = useState([]);
   const [suggestSongs, setSuggestsongs] = useState([]);
   const [showModalEditPlaylist, setShowModalEditPlaylist] = useState(false);
   const [selectedSong, setSelectedSong] = useState(null);
-  const handleCloseModal = ()=>{
+  const handleCloseModal = () => {
     setShowModalEditPlaylist(false);
-  }
-  const handleApplyChange = ()=>{
-
-  }
+  };
+  // const handleApplyChange = async () => {
+  //   const updatePlaylist = await playlistsApi.updatePlayListById(playlist._id);
+  //   console.log(updatePlaylist);
+  // };
   const onSongClick = (song) => {
     setSelectedSong(song);
   };
   useEffect(() => {
     const getPlaylistByUser = async () => {
+      dispatch({ type: 'UPDATE_PLAYLIST' });
       const res = await playlistsApi.getPlaylistById(path);
-      console.log(res.data.playlist)
-      setPlaylist(res.data.playlist);
+      // console.log(res.data.playlist);
+      // setPlaylist(res.data.playlist);
       setListSong(res.data.listSong);
+
+      // console.log(state.playlist)
     };
     getPlaylistByUser();
   }, [path]);
@@ -59,35 +54,39 @@ export default function DetailPlaylist() {
     };
     getAllSong();
   }, []);
-  const handleOpenModal = ()=>{
-    setShowModalEditPlaylist(true)
-  }
-  const handleFavoiteSong = (data)=>{
+  const handleOpenModal = () => {
+    setShowModalEditPlaylist(true);
+  };
+  const handleFavoiteSong = (data) => {
     const songs = [...listSong];
-    songs.forEach((song)=>{
-      if(song._id === data._id){
-        if(data.type === "add"){
+    songs.forEach((song) => {
+      if (song._id === data._id) {
+        if (data.type === 'add') {
           song.isFavorite = true;
-        }else{
+        } else {
           song.isFavorite = false;
         }
       }
-    })
+    });
     setListSong(songs);
-  }
+  };
   return (
     <React.Fragment>
       <div className="p-8 flex gap-8">
         <div className="gap-4">
-          {
-            state.user && playlist && listSong.length > 0 && <InfoPlaylist playlist={playlist
-            } onOpen={handleOpenModal} length={listSong.length} user={state.user}/>
-          }
+          {state.user && state.playlist && listSong.length > 0 && (
+            <InfoPlaylist
+              playlist={state.playlist}
+              onOpen={handleOpenModal}
+              length={listSong.length}
+              user={state.user}
+            />
+          )}
           {showModalEditPlaylist && (
             <EditPlaylist
-              onApply={handleApplyChange}
+              // onApply={handleApplyChange}
               onClose={handleCloseModal}
-              playlist={playlist}
+              playlist={state.playlist}
             />
           )}
         </div>
@@ -135,10 +134,15 @@ export default function DetailPlaylist() {
               </div>
             </div>
           </div>
-        ) :    
-         <RenderListSong onFavorite={handleFavoiteSong} listSong={listSong} onSongClick={onSongClick} selectedSong={selectedSong} />
-      }      
-        </div>
+        ) : (
+          <RenderListSong
+            onFavorite={handleFavoiteSong}
+            listSong={listSong}
+            onSongClick={onSongClick}
+            selectedSong={selectedSong}
+          />
+        )}
+      </div>
     </React.Fragment>
-  )
+  );
 }

@@ -3,6 +3,7 @@ import Reducer from './Reducer';
 
 const INITIAL_STATE = {
   user: null,
+  playlist:[],
   isFetching: false,
   error: false,
   player: {

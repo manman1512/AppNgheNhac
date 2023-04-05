@@ -19,7 +19,8 @@ export default function Layout() {
         <div className="w-[calc(100%-10rem)] overflow-y-auto">
           <Outlet />
           {
-            state.player.selectedSong && <Player/>
+            // state.player.selectedSong && <Player/>
+            state?.player?.selectedSong && <Player />
           }
         </div>
       </div>

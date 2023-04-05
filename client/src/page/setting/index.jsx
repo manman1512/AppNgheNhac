@@ -29,7 +29,6 @@ export default function Setting() {
   }, [file]);
 
   const handleSubmit = async (e) => {
-    console.log("man an cu")
     e.preventDefault();
     dispatch({ type: 'UPDATE_START' });
     const updateUser = {

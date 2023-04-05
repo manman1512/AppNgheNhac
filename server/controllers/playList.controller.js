@@ -151,6 +151,14 @@ module.exports = {
   updatePlayListById: async (req, res) => {
     const { _id } = req.user;
     const { playListId } = req.params;
+    const update = {};
+    if (req.body.title) {
+      update.title = req.body.title;
+    }
+    if (req.body.description) {
+      update.description = req.body.description;
+    }
+
     try {
       const playList = await Playlists.findById(playListId).populate("owner");
       // const exist = await Playlists.findById(playListId);
@@ -160,7 +168,7 @@ module.exports = {
         try {
           const updatePlaylist = await Playlists.findByIdAndUpdate(
             playListId,
-            { $set: req.body },
+            { $set: update},
             { new: true }
           );
           res

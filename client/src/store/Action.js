@@ -4,6 +4,12 @@ function setUser(user = null) {
     payload: user,
   };
 }
+function setPlaylist(playlist = []) {
+  return {
+    type: 'SET_PLAYLIST',
+    payload: playlist,
+  };
+}
 
 function updateStart(userCredentials) {
   return {
@@ -48,6 +54,18 @@ function setListSong(listSong) {
     payload: listSong,
   };
 }
+function updatePlaylist(playlist){
+  return {
+    type: 'UPDATE_PLAYLIST',
+  }
+}
+function updatePlaylistSuccess(playlist) {
+  return {
+    type: 'UPDATE_PLAYLIST_SUCCESS',
+    payload: playlist,
+  };
+}
+
 export {
   setUser,
   updateStart,
@@ -57,4 +75,7 @@ export {
   setSelectedSong,
   togglePlay,
   setListSong,
+  updatePlaylist,
+  updatePlaylistSuccess,
+  setPlaylist
 };

@@ -4,7 +4,7 @@ import { CiLogout } from 'react-icons/ci';
 import { MdError, MdOutlineArrowDropDown } from 'react-icons/md';
 import { Link } from 'react-router-dom';
 import usersApi from '../../axiosClient/api/users.js';
-import { setUser } from '../../store/Action.js';
+// import { setUser } from '../../store/Action.js';
 import { Context } from '../../store/Context.js';
 import Logoo from '../../images/LogoHeader.png';
 import { HiOutlineSearch } from 'react-icons/hi';
