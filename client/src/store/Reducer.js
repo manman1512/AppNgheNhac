@@ -65,9 +65,31 @@ const Reducer = (state, action) => {
         isFetching: true,
       };
     case 'UPDATE_PLAYLIST_SUCCESS':
+      /*
+        payload = {
+          _id: "adfadsf",
+          field: {
+            name: "jslkfdj",
+            upatedAt: "123123123"
+          }
+        }
+        const newP  = [...state.playlist];
+        return {
+          ...state,
+          playlist: newP.map(p => p._id === payload._id ? {
+            ...p,
+            ...field
+          } : p)
+        }
+      */
+    //  console.log(state)
+     const newPlaylist = [...state.playlist]
       return {
         ...state,
-        playlist: action.payload,
+        playlist: newPlaylist.map(p => p._id === action.payload._id ? {
+          ...p,
+          ...action.payload.update
+        } : p) ,
         isFetching: false,
         error: false,
       };

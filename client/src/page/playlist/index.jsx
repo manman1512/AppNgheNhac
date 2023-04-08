@@ -10,6 +10,7 @@ import { useLocation } from 'react-router-dom';
 import Playlist from './playlist';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { setPlaylist, updatePlaylistSuccess } from '../../store/Action';
 
 export default function Playlists() {
   const [state, dispatch] = useContext(Context);
@@ -21,7 +22,7 @@ export default function Playlists() {
   const _id = useId();
   // const location = useLocation();
   // console.log(location)
-
+  // console.log(state.playlist)
   const handleOnClick = (e) => {
     console.log(e);
   };
@@ -35,11 +36,11 @@ export default function Playlists() {
     formData.append('description', description);
     formData.append('fileName', image.name.split('.')[0] + Date.now());
     formData.append('file', image);
-    console.log('🚀 ~ file: index.jsx:29 ~ handleSubmit ~ formData:', formData);
+    // console.log('🚀 ~ file: index.jsx:29 ~ handleSubmit ~ formData:', formData);
 
     try {
       const res = await playlistsApi.createPlayList(formData);
-      console.log('🚀 ~ file: index.jsx:36 ~ handleSubmit ~ res:', res);
+      console.log(res);
       toast.success('Tạo Playlist thành công!', {
         position: 'top-right',
         autoClose: 500,
@@ -54,8 +55,13 @@ export default function Playlists() {
           setShowModal(false)
         },
       });
+      // SET LẠI PLAYLIST CHO HIỆN LÊN GIAO DIỆN
       const datas = await playlistsApi.getPlaylistByUser();
       setPlaylists(datas.data.playLists);
+      // console.log(datas.data.playLists)
+      dispatch(setPlaylist(datas.data.playLists))
+      dispatch(updatePlaylistSuccess(datas.data.playLists));
+
     } catch (err) {
       console.log(err);
     }
@@ -64,17 +70,21 @@ export default function Playlists() {
     console.log(image);
   }, [image]);
 
-  useEffect(() => {
-    const getPlaylistByUser = async () => {
-      const res = await playlistsApi.getPlaylistByUser();
-      const playlists = res.data.playLists
-      setPlaylists(playlists);
-      console.log('🚀 ~ file: index.jsx:21 ~ getPlaylistByUser ~ res:', res);
-      // console.log(state.user.data.User.playList.length)
-    };
-    getPlaylistByUser();
-  }, []);
-
+  // useEffect(() => {
+  //   const getPlaylistByUser = async () => {
+  //     const res = await playlistsApi.getPlaylistByUser();
+  //     const playlists = res.data.playLists
+  //     setPlaylists(playlists);
+  //     console.log('🚀 ~ file: index.jsx:21 ~ getPlaylistByUser ~ res:', res);
+  //     // console.log(state.user.data.User.playList.length)
+  //   };
+  //   getPlaylistByUser();
+  // }, []);
+  useEffect(()=>{
+    // console.log(state.playlist)
+    setPlaylists(state);
+    console.log("xyz")
+  },[])
   return (
     <React.Fragment>
       <div className="flex items-center w-full z-[1000] p-4">
@@ -209,7 +219,7 @@ export default function Playlists() {
         </div>
       ) : (
         <div className="flex gap-4 flex-wrap py-4 justify-start w-full">
-          {playlists.map((playlist, index) => (
+          {state.playlist.map((playlist, index) => (
             <Playlist
               key={index}
               data-id={index}

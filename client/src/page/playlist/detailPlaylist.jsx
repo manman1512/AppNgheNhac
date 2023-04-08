@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import playlistsApi from '../../axiosClient/api/playlists';
 import { Context } from '../../store/Context';
 import { format } from 'date-fns';
@@ -11,38 +11,41 @@ import { IoIosAdd } from 'react-icons/io';
 import RenderListSong from '../../components/RenderListSong';
 import EditPlaylist from './EditPlaylist';
 import InfoPlaylist from './InfoPlaylist';
+import { setPlaylist } from '../../store/Action';
+import AddSongOnPlaylist from './AddSongOnPlaylist';
 const moment = require('moment');
 require('moment/locale/vi'); // Load Vietnamese locale
 
-export default function DetailPlaylist() {
+export default function DetailPlaylist(props) {
   const [state, dispatch] = useContext(Context);
-
   const location = useLocation();
   const path = location.pathname.split('/')[2];
-  // const [playlist, setPlaylist] = useState([]);
   const [listSong, setListSong] = useState([]);
   const [suggestSongs, setSuggestsongs] = useState([]);
   const [showModalEditPlaylist, setShowModalEditPlaylist] = useState(false);
   const [selectedSong, setSelectedSong] = useState(null);
+  const [show, setShow] = useState(false);
   const handleCloseModal = () => {
     setShowModalEditPlaylist(false);
   };
-  // const handleApplyChange = async () => {
-  //   const updatePlaylist = await playlistsApi.updatePlayListById(playlist._id);
-  //   console.log(updatePlaylist);
-  // };
+  const handleAdd = () => {
+    // console.log(props);
+    setShow(true);
+    
+  };
   const onSongClick = (song) => {
     setSelectedSong(song);
   };
   useEffect(() => {
-    const getPlaylistByUser = async () => {
-      dispatch({ type: 'UPDATE_PLAYLIST' });
-      const res = await playlistsApi.getPlaylistById(path);
-      // console.log(res.data.playlist);
-      // setPlaylist(res.data.playlist);
-      setListSong(res.data.listSong);
+    // console.log("xyz2")
+  }, []);
 
-      // console.log(state.playlist)
+  useEffect(() => {
+    dispatch({ type: 'UPDATE_PLAYLIST' });
+    const getPlaylistByUser = async () => {
+      const res = await playlistsApi.getPlaylistById(path);
+      setListSong(res.data.listSong);
+      console.log(res.data.playlist);
     };
     getPlaylistByUser();
   }, [path]);
@@ -51,6 +54,7 @@ export default function DetailPlaylist() {
     const getAllSong = async () => {
       const songs = await songsApi.getAllSong();
       setSuggestsongs(songs.data);
+      console.log(songs.data);
     };
     getAllSong();
   }, []);
@@ -74,19 +78,20 @@ export default function DetailPlaylist() {
     <React.Fragment>
       <div className="p-8 flex gap-8">
         <div className="gap-4">
-          {state.user && state.playlist && listSong.length > 0 && (
+          {state.user && state.playlist && (
             <InfoPlaylist
-              playlist={state.playlist}
+              playlist={state.playlist.find((x) => x._id === path)}
               onOpen={handleOpenModal}
-              length={listSong.length}
+              length={listSong.length | 0}
               user={state.user}
             />
           )}
           {showModalEditPlaylist && (
             <EditPlaylist
+              playlist={state.playlist.find((x) => x._id === path)}
               // onApply={handleApplyChange}
               onClose={handleCloseModal}
-              playlist={state.playlist}
+              // playlist={state.playlist}
             />
           )}
         </div>
@@ -118,13 +123,14 @@ export default function DetailPlaylist() {
                             {s.name}
                           </div>
                         </td>
-                        <td className="px-24 py-2">Nghe si</td>
+                        <td className="px-24 py-2">{s.artist.name}</td>
                         <td className="px-24 py-2 visible">
                           <IoIosAdd
                             className="cursor-pointer border border-gray-400 rounded-full"
                             color="black"
                             size="1.2rem"
-                            title="Thêm vào playlist"
+                            title="Khác"
+                            onClick={handleAdd}
                           />
                         </td>
                       </tr>
@@ -132,6 +138,9 @@ export default function DetailPlaylist() {
                   </tbody>
                 </table>
               </div>
+              <Link to="/" className="mt-10 font-bold ">
+                Thêm...
+              </Link>
             </div>
           </div>
         ) : (
@@ -142,6 +151,7 @@ export default function DetailPlaylist() {
             selectedSong={selectedSong}
           />
         )}
+        <AddSongOnPlaylist show={show} onClose={()=>setShow(false)}/>
       </div>
     </React.Fragment>
   );

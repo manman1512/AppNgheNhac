@@ -9,7 +9,7 @@ module.exports = {
     const { name } = req.params;
     try {
       const artist = artists.filter((a) => a.name.toLowerCase().includes(name));
-      console.log(artist);
+      // console.log(artist);
       res.status(200).json(artist);
     } catch (error) {
       console.log(error);
@@ -18,11 +18,11 @@ module.exports = {
 
   getArtistById: async (req, res) => {
     const { idArtist } = req.params;
-    console.log(idArtist);
+    // console.log(idArtist);
     try {
       const artist = await Artists.findById(idArtist);
       if (artist) {
-        console.log(artist);
+        // console.log(artist);
         return res.status(200).json(artist);
       } else {
         return res.status(400).json({

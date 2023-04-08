@@ -76,7 +76,7 @@ export default function Navigation({ className }) {
 
   return (
     <div className={`${className} `}>
-      <div className="flex flex-col gap-2 justify-center items-center ">
+      <div className="flex flex-col gap-2 justify-center items-center w-[11rem]">
         <div className="items-center justify-around flex flex-col  w-full gap-2">
           <div
             user-label="home"

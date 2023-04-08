@@ -6,7 +6,9 @@ import { Context } from '../../store/Context';
 import playlistsApi from '../../axiosClient/api/playlists';
 import Playlist from './playlist';
 import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import { useNavigate } from 'react-router-dom';
+import { updatePlaylistSuccess } from '../../store/Action';
 
 // export default function EditPlaylist({ playlist, onClose, onApply }) {
 export default function EditPlaylist({ playlist, onClose }) {
@@ -16,10 +18,9 @@ export default function EditPlaylist({ playlist, onClose }) {
   const [state, dispatch] = useContext(Context);
   const navigate = useNavigate();
 
-  // console.log(playlist);
-
   useEffect(() => {
     console.log(image);
+    // console.log(state.playlist)
   }, [image]);
 
   const handleApplyChange = async (e) => {
@@ -29,6 +30,21 @@ export default function EditPlaylist({ playlist, onClose }) {
       title,
       description,
     };
+
+    // if(image){
+    //   const data = new FormData();
+    //   const fileName = Date.now() + image.name;
+    //   data.append('fileName', fileName);
+    //   data.append('image', image);
+    //   updatePlaylist.thumbnail = fileName;
+    //   try {
+    //     const response = await playlistsApi.updatePlayListById(data);
+    //     console.log(response)
+    //   } catch (error) {
+    //     console.log(error);
+    //   }
+    // }
+
     try {
       const res = await playlistsApi.updatePlayListById(
         playlist._id,
@@ -51,7 +67,7 @@ export default function EditPlaylist({ playlist, onClose }) {
         },
       });
       console.log(res)
-      dispatch({ type: 'UPDATE_PLAYLIST_SUCCESS', payload: res.data.updatePlaylist });
+      dispatch(updatePlaylistSuccess(res.data.update));
     } catch (error) {
       console.log(error);
     }

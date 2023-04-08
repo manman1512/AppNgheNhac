@@ -46,7 +46,13 @@ const createPlayList = async (req, res) => {
       });
       await User.updateOne({ $push: { playList: newPlaylist } });
       // await playList.updateOne({ $pull: { listSong: songId } });
-      return res.status(200).json(newPlaylist);
+      // return res.status(200).json(newPlaylist);
+
+      // Lấy tất cả các playlist
+      const playlists = await Playlists.find({});
+
+      // Trả về toàn bộ playlist
+      return res.status(200).json(playlists);
     }
     // console.log(User.playList)
   } catch (error) {
@@ -62,7 +68,7 @@ module.exports = {
   addSongById: async (req, res) => {
     const { playListId, songId } = req.params;
     const { _id } = req.user;
-    console.log(songId)
+    // console.log(songId)
     try {
       const playList = await Playlists.findById(playListId).populate("owner");
       const exist = await Playlists.findById(playListId);
@@ -75,9 +81,9 @@ module.exports = {
         });
         if (exist.listSong.includes(song._id))
           return res.json({ msg: "Bai hat da ton tai" });
-        console.log(exist.listSong.includes(song._id));
+        // console.log(exist.listSong.includes(song._id));
         // exist.save();
-        console.log(song)
+        // console.log(song)
         exist.listSong.push(song);
         exist.save();
         res.json({ msg: "Them bai hat thanh cong" , song});
@@ -173,7 +179,10 @@ module.exports = {
           );
           res
             .status(200)
-            .json({ message: "Update thanh cong", updatePlaylist });
+            .json({ message: "Update thanh cong", update:{
+              _id: playListId,
+              update
+            } });
         } catch (error) {
           console.log(error);
           res.status(500).json({ message: "Loi server" });
@@ -229,8 +238,10 @@ module.exports = {
         id,
         artist
       }))
+
       const listSong = await getSongLink(playlist.listSong);
       playlist.listSong = listSong
+      // console.log(listSong)
       res.status(200).json({
         playlist,
         listSong

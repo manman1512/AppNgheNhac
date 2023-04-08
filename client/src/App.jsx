@@ -18,19 +18,19 @@ import usersApi from './axiosClient/api/users';
 import { setUser } from './store/Action';
 
 function App() {
-  const [state, dispatch] = useContext(Context);
-  useEffect(() => {
-    const token = window.localStorage.getItem('accessToken');
-    console.log(token);
-    if (token !== null) {
-      (async () => {
-        const response = await usersApi.getMe();
-        // console.log(response.data.User);
-        dispatch(setUser(response.data.User));
-      })();
-    }
-    console.log(state)
-  }, []);
+  // const [state, dispatch] = useContext(Context);
+  // useEffect(() => {
+  //   const token = window.localStorage.getItem('accessToken');
+  //   console.log(token);
+  //   if (token !== null) {
+  //     (async () => {
+  //       const response = await usersApi.getMe();
+  //       // console.log(response.data.User);
+  //       dispatch(setUser(response.data.User));
+  //     })();
+  //   }
+  //   console.log(state)
+  // }, []);
 
   return (
     <Router>

@@ -1,4 +1,5 @@
 const songs = require("../models/song.model");
+const artists = require("../models/artist.model")
 const user = require("../models/user.model");
 const { ZingMp3 } = require("zingmp3-api-full");
 
@@ -17,8 +18,16 @@ module.exports = {
 
   // GET ALL SONG
   getAllSong: async (req, res) => {
-    const allSongs = await songs.find();
-    const first15Songs = allSongs.slice(25, 35);
+    const allSongs = await songs.find().populate('artist');;
+    const first15Songs = allSongs.slice(36, 46);
+    const Songs = first15Songs.map(({_id, id, artist}) => ({
+      _id,
+      id,
+      artist
+    }))
+   
+
+    // console.log(Songs)
     res.status(200).json(first15Songs);
   },
 
