@@ -2,51 +2,54 @@ import React, { useContext, useEffect, useState } from 'react';
 import { HiPlay } from 'react-icons/hi';
 import { BsHeartFill, BsFillPauseCircleFill } from 'react-icons/bs';
 import { Context } from '../../store/Context';
-import { setSelectedSong } from '../../store/Action';
+import { addLoveSong, removeLoveSong, setSelectedSong, updateLinkSong } from '../../store/Action';
 import loveSongApi from '../../axiosClient/api/loveSong';
 import { AiFillHeart, AiOutlineHeart } from 'react-icons/ai';
+import songsApi from '../../axiosClient/api/songs';
 
 export default function RenderListSong({ listSong, onSongClick, onFavorite }) {
   const [state, dispatch] = useContext(Context);
   // const [deleteLoveSong, setDeleteLoveSong] = useState(false);
   const { selectedSong } = state.player;
 
-  const [favoriteSongs, setFavoriteSongs] = useState([]);
-
-  useEffect(() => {
-    const getLoveSongByUser = async () => {
-      const loveSongs = await loveSongApi.getLoveSongByUser();
-      const lovesongs = loveSongs.data.lovesong;
-      const song = lovesongs.filter((l) => {
-        return listSong.some((ls) => l._id === ls._id);
-      });
-      setFavoriteSongs(song);
-    };
-    getLoveSongByUser();
-  }, [listSong]);
-
+  const loveSong = state.loveSong;
   const handleRemoveFavorite = async (_id) => {
-    const response = await loveSongApi.handleLoveSongById(_id);
-    const { data } = response;
-    const newData = {
-      _id: data._id,
-      type: 'remove',
-    };
-    onFavorite(newData);
+    try {
+
+      const response = await loveSongApi.handleRemoveLoveSong(_id);
+      const { data } = response;
+      dispatch(removeLoveSong(data.song))
+    } catch (error) {
+      console.log(error)
+    }
   };
 
   const handleAdd = async (_id) => {
-    const response = await loveSongApi.handleLoveSongById(_id);
-    const { data } = response;
-    const newData = {
-      _id: data._id,
-      type: 'add',
-    };
-    onFavorite(newData);
-  };
+    try {
+      const response = await loveSongApi.handleLoveSongById(_id);
+      const { data } = response;
+      dispatch(addLoveSong(data.song))
+      // onFavorite(newData);
+    } catch (error) {
 
+    }
+  };
+  const setSong = async (l) => {
+    if (l.link === undefined) {
+      const response = await songsApi.getLinkSong(l.id)
+      const link = response.data.data["128"]
+      dispatch(updateLinkSong(l._id, link))
+      dispatch(setSelectedSong({
+        ...l,
+        link
+      }))
+    } else {
+      dispatch(setSelectedSong(l))
+    }
+  }
+  console.log(state);
   return (
-    <div className="relative overflow-x-auto">
+    <div className="relative overflow-x-auto w-full">
       <table className="w-full text-left ">
         <thead className="text-lg">
           <tr>
@@ -64,40 +67,32 @@ export default function RenderListSong({ listSong, onSongClick, onFavorite }) {
         <tbody>
           {listSong.map((l, i) => (
             <tr
-              className={`border-b ${
-                l && selectedSong && l._id === selectedSong._id
-                  ? 'bg-[#aee9c5]'
-                  : 'transparent '
-              } hover:bg-[#aee9c5] group`}
+              className={`border-b ${l && selectedSong && l._id === selectedSong._id
+                ? 'bg-[#aee9c5]'
+                : 'transparent '
+                } hover:bg-[#aee9c5] group`}
               key={i}
             >
               <th scope="row" className="px-6 py-2">
                 <div className="flex items-center">
                   <div className="visible group-hover:invisible">{i + 1}</div>
                   <div className="bg-transparent -translate-x-5 right-0 z-50">
-                    {l && selectedSong && l._id === selectedSong._id ? (
-                      <button
-                        onClick={() => {
-                          dispatch(setSelectedSong(l));
-                        }}
-                      >
-                        <BsFillPauseCircleFill
+                    <button
+                      onClick={() => setSong(l)
+
+                      }
+                    >
+                      {
+                        state.player.isPlay ? <BsFillPauseCircleFill
+                          className="invisible group-hover:visible"
+                          size="2rem"
+                        /> : <HiPlay
                           className="invisible group-hover:visible"
                           size="2rem"
                         />
-                      </button>
-                    ) : (
-                      <button
-                        onClick={() => {
-                          dispatch(setSelectedSong(l));
-                        }}
-                      >
-                        <HiPlay
-                          className="invisible group-hover:visible"
-                          size="2rem"
-                        />
-                      </button>
-                    )}
+                      }
+                    </button>
+
                   </div>
                 </div>
               </th>
@@ -112,7 +107,7 @@ export default function RenderListSong({ listSong, onSongClick, onFavorite }) {
                 </div>
               </td>
               <td className="px-6 py-2">{l.artist.name}</td>
-              {!l.isFavorite && !favoriteSongs.some((f) => f._id === l._id) ? (
+              {!loveSong.map(l => l._id).includes(l._id) ? (
                 <td className="px-6 py-2">
                   <AiOutlineHeart
                     className="cursor-pointer"

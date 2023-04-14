@@ -11,78 +11,78 @@ import { togglePlay } from '../../store/Action';
 import { Context } from '../../store/Context';
 
 export default function Player() {
-    const [state, dispatch] = useContext(Context);
-    const songRef = useRef();
-    const {player: {selectedSong, isPlay}} = state;
-    const [currentTime, setCurrentTime] = useState(0);
-    const [songDuration, setSongDuration] = useState(0)
-    const [progress, setProgress] = useState(0)
-    const [mute, setMute] = useState(false);
-    const [volume, setVolume] = useState(100);
-    const [tempVolume, setTempVolume] = useState(0);
-    const [isMouseKeep, setIsMouseKeep] = useState(false)
-    useEffect(()=>{
-        if(songRef.current){
-            if(isPlay){
-                songRef.current.play();
-            }else{
-                songRef.current.pause();
-            }
-        }
-    },[songRef, isPlay])
-    useEffect(() => {
-        const x = setInterval(() => {
-          if (isPlay && songRef) {
-            setCurrentTime((prev) => {
-              if (prev < Math.round(songDuration))
-                return prev + 1; //Math.round() => làm tròn
-              else return prev;
-            });
-          }
-        }, 1000);
-        return () => clearInterval(x);
-      }, [isPlay, songDuration, songRef]);
-      useEffect(() => {
-        if (Math.round(songDuration) === currentTime) {
-          dispatch(togglePlay());
-        }
-      }, [songDuration, currentTime]);
-      useEffect(() => {
-        if (songDuration > 0 && !isMouseKeep) {
-          setProgress((currentTime / songDuration) * 100);
-        }
-      }, [currentTime, isMouseKeep]);
-      useEffect(() => {
-        if (songRef.current) {
-          if (isPlay) {
-            songRef.current.play();
-          } else {
-            songRef.current.pause();
-          }
-        }
-      }, [selectedSong, songRef, isPlay]);
-      useEffect(() => {
-        setCurrentTime(0);
-      }, [selectedSong]);
-      useEffect(() => {
-        if (songRef.current) {
-          songRef.current.volume = volume / 100;
-        }
-      }, [volume, songRef]);
-      useEffect(() => {
-        if (songRef.current) {
-          songRef.current.mute = mute;
-        }
-      }, [mute, songRef]);
-      useEffect(() => {
-        // console.log(loveSongs, selectedSong);
-      }, [selectedSong]);
+  const [state, dispatch] = useContext(Context);
+  const songRef = useRef();
+  const { player: { selectedSong, isPlay } } = state;
+  const [currentTime, setCurrentTime] = useState(0);
+  const [songDuration, setSongDuration] = useState(0)
+  const [progress, setProgress] = useState(0)
+  const [mute, setMute] = useState(false);
+  const [volume, setVolume] = useState(100);
+  const [tempVolume, setTempVolume] = useState(0);
+  const [isMouseKeep, setIsMouseKeep] = useState(false)
+  useEffect(() => {
+    if (songRef.current) {
+      if (isPlay) {
+        songRef.current.play();
+      } else {
+        songRef.current.pause();
+      }
+    }
+  }, [songRef, isPlay])
+  useEffect(() => {
+    const x = setInterval(() => {
+      if (isPlay && songRef) {
+        setCurrentTime((prev) => {
+          if (prev < Math.round(songDuration))
+            return prev + 1; //Math.round() => làm tròn
+          else return prev;
+        });
+      }
+    }, 1000);
+    return () => clearInterval(x);
+  }, [isPlay, songDuration, songRef]);
+  useEffect(() => {
+    if (Math.round(songDuration) === currentTime) {
+      dispatch(togglePlay());
+    }
+  }, [songDuration, currentTime]);
+  useEffect(() => {
+    if (songDuration > 0 && !isMouseKeep) {
+      setProgress((currentTime / songDuration) * 100);
+    }
+  }, [currentTime, isMouseKeep]);
+  useEffect(() => {
+    if (songRef.current) {
+      if (isPlay) {
+        songRef.current.play();
+      } else {
+        songRef.current.pause();
+      }
+    }
+  }, [selectedSong, songRef, isPlay]);
+  useEffect(() => {
+    setCurrentTime(0);
+  }, [selectedSong]);
+  useEffect(() => {
+    if (songRef.current) {
+      songRef.current.volume = volume / 100;
+    }
+  }, [volume, songRef]);
+  useEffect(() => {
+    if (songRef.current) {
+      songRef.current.mute = mute;
+    }
+  }, [mute, songRef]);
+  useEffect(() => {
+    // console.log(loveSongs, selectedSong);
+  }, [selectedSong]);
   return (
     <div
       className=" h-20 flex items-center border
-        bg-[#1c1c1c] fixed bottom-0 w-full"
+        bg-[#1c1c1c] fixed bottom-0 w-[calc(100%-11.5 rem)] px-4"
     >
-      <div className="flex items-center ml-2 flex-1">
+      <div className="flex items-center w-[20%]">
         <div className="mr-4 ">
           <img
             className="w-[50px] h-[50px] rounded-xl"
@@ -100,7 +100,7 @@ export default function Player() {
           </div>
         </div>
       </div>
-      <div className="flex flex-col justify-center items-center flex-1">
+      <div className="flex flex-col justify-center items-center w-[60%]">
         <div className="flex items-center">
           <IoMdSkipBackward size="1.2rem" color="white" className="mr-5" />
           {!isPlay ? (
@@ -119,9 +119,9 @@ export default function Player() {
           ) : (
             <button
               onClick={() =>
-                  dispatch(togglePlay())
-                }
-              
+                dispatch(togglePlay())
+              }
+
             >
               <BsFillPauseCircleFill color="white" size="2rem" />
             </button>
@@ -178,7 +178,7 @@ export default function Player() {
           </div>
         </div>
       </div>
-      <div className=" mr-4 flex-1  ">
+      <div className="w-[20%]">
         <div className="ml-auto w-16 relative group">
           {!mute ? (
             <button

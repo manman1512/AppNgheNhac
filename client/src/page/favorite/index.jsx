@@ -27,9 +27,9 @@ import RenderListSong from "../../components/RenderListSong"
 import { setSelectedSong } from '../../store/Action';
 
 export default function Favorite() {
-  
+
   const [state, dispatch] = useContext(Context);
-  const [loveSongs, setLoveSongs] = useState([]);
+  const loveSongs = state.loveSong;
   const [songDuration, setSongDuration] = useState(0);
   const [isPlay, setIsPlay] = useState(false);
   const [progress, setProgress] = useState(0);
@@ -40,20 +40,6 @@ export default function Favorite() {
   const [isMouseKeep, setIsMouseKeep] = useState(false);
   const PF = process.env.REACT_APP_SERVER_URL;
   const [number, setNumber] = useState('')
-
-  const songRef = useRef(null); // chỉ sử dụng giá trị khởi tạo(null) trong lần dầu tiên
-  // luôn return object có properties -> current
-  // (MUỐN LẤY GIÁ TRỊ PHẢI .current)
-  useEffect(() => {
-    const getLoveSongByUser = async () => {
-      const res = await loveSongApi.getLoveSongByUser();
-      setLoveSongs(res.data.lovesong);
-      console.log('🚀 ~ file: index.jsx:  23 ~ getLoveSongByUser ~ res:', res);
-      console.log(state)
-      setNumber(res.data.lovesong.length)
-    };
-    getLoveSongByUser();
-  }, []);
 
   const onSongClick = (song) => {
     // setPlayer(true);
@@ -98,15 +84,15 @@ export default function Favorite() {
                 Hãy lưu bài hát bằng cách nhắn vào biểu tượng trái tim
               </div>
               <div className='border border-black rounded-xl'>
-                <Link to= "/" className="flex items-center p-2">
-                  <RiHeartAddLine className='mr-1'/>
+                <Link to="/" className="flex items-center p-2">
+                  <RiHeartAddLine className='mr-1' />
                   <p>Thêm bài hát</p>
                 </Link>
               </div>
             </div>
-          ) : <RenderListSong onSongClick={onSongClick}  listSong={loveSongs}/> }
+          ) : <RenderListSong onSongClick={onSongClick} listSong={loveSongs} />}
 
-          
+
         </div>
       )}
     </div>

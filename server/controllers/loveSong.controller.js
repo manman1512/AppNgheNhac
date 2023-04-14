@@ -10,7 +10,7 @@ module.exports = {
 
     try {
       const user = await User.findById(_id).populate("loveSong");
-      const song = await songs.findById(songId);
+      const song = await songs.findById(songId).populate("artist");
       // console.log(loveSong)
       if (!song) {
         return res.status(400).send("Bai hat khong tim thay!");
@@ -19,7 +19,7 @@ module.exports = {
       const isExist = loveSong.filter(
         (s) => s._id.toString() === song._id.toString()
       );
-      
+
 
       // if (isExist.length > 0) {
       //   return res.status(400).json({
@@ -35,7 +35,7 @@ module.exports = {
         res.status(200).json({ message: "Xoa bai hat thanh cong!", _id: songId });
       } else {
         await user.updateOne({ $push: { loveSong: songId } });
-        res.status(200).json({ message: "Thêm bai hat yêu thích thanh cong!", _id: songId });
+        res.status(200).json({ message: "Thêm bai hat yêu thích thanh cong!", song });
       }
     } catch (error) {
       console.log(error);
@@ -67,7 +67,32 @@ module.exports = {
   //     console.log(error);
   //   }
   // },
+  removeLoveSong: async (req, res) => {
+    const { songId } = req.query;
+    const { _id } = req.user;
+    const song = await songs.findById(songId);
+    const user = await User.findById(_id);
+    if (!song) {
+      return res.status(404).json({
+        msg: "Not found song!"
+      })
+    }
+    if (!user) {
+      return res.status(404).json({
+        msg: "Not found user"
+      })
+    }
+    await user.updateOne({
+      $pull: {
+        loveSong: song._id
+      }
+    })
+    return res.status(200).json({
+      msg: "Remove love song successfull",
+      song
+    })
 
+  },
   getLoveSongByUser: async (req, res) => {
     const { _id } = req.user;
     try {
@@ -81,7 +106,13 @@ module.exports = {
       // console.log("🚀 ~ file: loveSong.controller.js:73 ~ getLoveSongByUser: ~ loveSong:", loveSong)
 
       res.status(200).json({
-        lovesong: loveSong,
+        lovesong: loveSong.map(ls => ({
+          id: ls.id,
+          _id: ls._id,
+          thumbnail: ls.thumbnail,
+          name: ls.name,
+          artist: ls.artist
+        })),
         User: user.username,
       });
     } catch (error) {

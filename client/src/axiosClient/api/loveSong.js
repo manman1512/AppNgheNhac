@@ -7,9 +7,14 @@ const loveSongApi = {
   handleLoveSongById: async (data) => {
     return await axiosClient.post('/loveSongs/handleLoveSongById/' + data);
   },
-  deleteLoveSongById: async (data) =>{
-    return await axiosClient.delete('/loveSongs/deleteLoveSongById/' + data)
-  },
+  handleRemoveLoveSong: async (data) => {
+    return await axiosClient.delete("/loveSongs/removeLoveSong", {
+      params: {
+        songId: data
+      }
+    })
+  }
+
 };
 
 export default loveSongApi;

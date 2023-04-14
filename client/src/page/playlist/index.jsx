@@ -70,21 +70,15 @@ export default function Playlists() {
     console.log(image);
   }, [image]);
 
-  // useEffect(() => {
-  //   const getPlaylistByUser = async () => {
-  //     const res = await playlistsApi.getPlaylistByUser();
-  //     const playlists = res.data.playLists
-  //     setPlaylists(playlists);
-  //     console.log('🚀 ~ file: index.jsx:21 ~ getPlaylistByUser ~ res:', res);
-  //     // console.log(state.user.data.User.playList.length)
-  //   };
-  //   getPlaylistByUser();
-  // }, []);
-  useEffect(()=>{
-    // console.log(state.playlist)
-    setPlaylists(state);
-    console.log("xyz")
-  },[])
+  const handleOverlayClick = (event) => {
+    if (
+      event.target.classList.contains('inset-0') &&
+      event.target.classList.contains('z-50')
+    ) {
+      setShowModal(false);
+    }
+  };
+
   return (
     <React.Fragment>
       <div className="flex items-center w-full z-[1000] p-4">
@@ -104,6 +98,7 @@ export default function Playlists() {
           <div
             className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed 
           inset-0 z-50 outline-none focus:outline-none"
+          onClick={handleOverlayClick} 
           >
             <div className="relative w-auto my-6 mx-auto max-w-3xl">
               {/*content*/}

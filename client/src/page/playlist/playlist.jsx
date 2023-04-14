@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom';
 import playlistsApi from '../../axiosClient/api/playlists';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { setPlaylist, updatePlaylistSuccess } from '../../store/Action';
+import { setPlaylist, setSelectedPlaylist, updatePlaylistSuccess } from '../../store/Action';
 import { Context } from '../../store/Context';
 
 export default function Playlist({ playlist }) {
@@ -50,11 +50,10 @@ export default function Playlist({ playlist }) {
       <div className="ml-4 w-[200px]">
         <div
           style={{
-            backgroundImage: `url(${
-              playlist.thumbnail
+            backgroundImage: `url(${playlist.thumbnail
                 ? `${PF}/images/${playlist.thumbnail}`
                 : 'https://picsum.photos/400'
-            })`,
+              })`,
           }}
           className={`
             mx-auto bg-center w-[200px] group relative rounded-xl transition-all duration-500 
@@ -77,7 +76,7 @@ export default function Playlist({ playlist }) {
               className="text-[28px] hover:scale-150 cursor-pointer"
               title="Phát"
             />
-            <Link className="" to={`/playlist/${playlist._id}`}>
+            <Link className="" to={`/playlist/${playlist._id}`} onClick={() => dispatch(setSelectedPlaylist(playlist._id))}>
               <BsThreeDots
                 color="white"
                 className="text-[28px] hover:scale-150 cursor-pointer"

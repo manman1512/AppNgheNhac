@@ -11,7 +11,11 @@ const songsApi = {
 
   getAllSong: async () => {
     return await axiosClient.get('/songs/getAllSong');
+
   },
+  getLinkSong: async (songId) => {
+    return await axiosClient.get(`/songs/getSongMP3/${songId}`)
+  }
 };
 
 export default songsApi;

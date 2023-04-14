@@ -3,13 +3,14 @@ import Reducer from './Reducer';
 
 const INITIAL_STATE = {
   user: null,
-  playlist:[],
+  playlist: [],
   isFetching: false,
   error: false,
   player: {
     selectedSong: null,
     isPlay: false,
-  }
+  },
+  loveSong: [],
 };
 
 export const Context = createContext(null);

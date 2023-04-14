@@ -17,129 +17,131 @@ export default function Navigation({ className }) {
 
   // console.log(state.user)
   useEffect(() => {
-    switch (location.pathname) {
-      case '/':
+    console.log(location.pathname);
+    // switch () {
+    //   case location.pathname.match(/\//):
+    //     setSelect('home');
+    //     break;
+    //   case location.pathname.match(/\/favorite\/?\w*/):
+    //     setSelect('favorite');
+    //     break;
+    //     case location.pathname.match(/\/playlist\/?\w*/):
+    //     setSelect('playlist');
+    //     break;
+    //   case '/setting':
+    //     setSelect('setting');
+    //     break;
+    //   default:
+    //     setSelect('home');
+    // }
+    switch (true) {
+      case location.pathname === "/":
         setSelect('home');
         break;
-      case '/favorite':
+      case location.pathname.includes("favorite"):
         setSelect('favorite');
         break;
-      case '/playlist':
+        case location.pathname.includes("playlist"):
         setSelect('playlist');
         break;
-      case '/setting':
+      case location.pathname.includes("setting"):
         setSelect('setting');
         break;
       default:
         setSelect('home');
     }
+    
   }, [location]);
-  useEffect(() => {
-    const listElement = document.querySelectorAll('.navigate');
-    listElement.forEach((element) => {
-      if (element.getAttribute('user-label') === select) {
-        element.style.backgroundColor = bgColor;
-        element.childNodes[0].style.color = '#fff';
-      } else {
-        element.style.backgroundColor = 'transparent';
-        element.childNodes[0].style.color = iconColor;
-      }
-    });
-  }, [select]);
-  useEffect(() => {
-    const listElement = document.querySelectorAll('.navigate');
-    listElement.forEach((el) => {
-      el.childNodes[0].style.color = iconColor;
-    });
-  }, []);
-  function _onMouseOver(event) {
-    event.stopPropagation();
-    const element = event.currentTarget;
-    // const label = element.getAttribute('user-label');
-    element.style.backgroundColor = bgColor;
-    element.style.color = '#fff';
-    element.childNodes[0].style.color = '#fff';
-  }
-  function _onMouseOut(event) {
-    event.stopPropagation();
-    const element = event.currentTarget;
-    element.style.backgroundColor = 'transparent';
-    element.childNodes[0].style.color = iconColor;
-    const listElement = document.querySelectorAll('.navigate');
-    listElement.forEach((element) => {
-      if (element.getAttribute('user-label') === select) {
-        element.style.backgroundColor = bgColor;
-        element.childNodes[0].style.color = '#fff';
-      }
-    });
-  }
-
+  // useEffect(() => {
+  //   const listElement = document.querySelectorAll('.navigate');
+  //   listElement.forEach((element) => {
+  //     if (element.getAttribute('user-label') === select) {
+  //       element.style.backgroundColor = bgColor;
+  //       element.childNodes[0].style.color = '#fff';
+  //     } else {
+  //       element.style.backgroundColor = 'transparent';
+  //       element.childNodes[0].style.color = iconColor;
+  //     }
+  //   });
+  // }, [select]);
+  // useEffect(() => {
+  //   const listElement = document.querySelectorAll('.navigate');
+  //   listElement.forEach((el) => {
+  //     el.childNodes[0].style.color = iconColor;
+  //   });
+  // }, []);
+  // function _onMouseOver(event) {
+  //   event.stopPropagation();
+  //   const element = event.currentTarget;
+  //   // const label = element.getAttribute('user-label');
+  //   element.style.backgroundColor = bgColor;
+  //   element.style.color = '#fff';
+  // }
+  // function _onMouseOut(event) {
+  //   event.stopPropagation();
+  //   const element = event.currentTarget;
+  //   element.style.backgroundColor = 'transparent';
+  //   element.childNodes[0].style.color = iconColor;
+  //   const listElement = document.querySelectorAll('.navigate');
+  //   listElement.forEach((element) => {
+  //     if (element.getAttribute('user-label') === select) {
+  //       element.style.backgroundColor = bgColor;
+  //       element.style.color = "#fff"
+  //     }else{
+  //       element.style.backgroundColor = "#fff";
+  //       element.style.color = "#000"
+  //     }
+  //   });
+  // }
+  useEffect(()=>{
+    const elements = document.querySelectorAll(".navigate");
+    if(elements.length > 0){
+      elements.forEach(element =>{
+        // console.log(element.getAttribute("user-label"));
+        if(element.getAttribute("user-label") === select){
+          element.classList.add("active")
+          // console.log(element.style);
+        }else{
+          element.classList.remove("active")
+        }
+      })
+    }
+  },[select])
   return (
     <div className={`${className} `}>
       <div className="flex flex-col gap-2 justify-center items-center w-[11rem]">
         <div className="items-center justify-around flex flex-col  w-full gap-2">
-          <div
+          <Link
             user-label="home"
-            onMouseOver={_onMouseOver}
-            onMouseOut={_onMouseOut}
-            className={`navigate p-2 rounded-[14px] w-full flex justify-between `}
+            // onMouseOver={_onMouseOver}
+            // onMouseOut={_onMouseOut}
+            className={`navigate p-2 rounded-[14px] w-full flex hover:bg-[${bgColor}] hover:text-white `}
+            to="/"
           >
-            <Link to="/" className="flex">
-              <AiFillHome size={iconSize} />
-              <p className="ml-2 font-bold">Trang Chủ</p>
-            </Link>
-          </div>
-          {state.user ? (
-            <div
-              user-label="playlist"
-              onMouseOver={_onMouseOver}
-              onMouseOut={_onMouseOut}
-              className={`navigate p-2 rounded-[14px] w-full flex justify-between`}
-            >
-              <Link to="/playlist" className="flex">
-                <RiPlayListFill size={iconSize} />
-                <p className="ml-2 font-bold">Tạo Playlist</p>
-              </Link>
-            </div>
-          ) : (
-            <div
-              user-label="playlist"
-              onMouseOver={_onMouseOver}
-              onMouseOut={_onMouseOut}
-              className={`navigate p-2 rounded-[14px] w-full flex justify-between`}
-            >
-              <Link to="/login" className="flex">
-                <RiPlayListFill size={iconSize} />
-                <p className="ml-2 font-bold">Playlist</p>
-              </Link>
-            </div>
-          )}
+            <AiFillHome size={iconSize} />
+            <p className="ml-2 font-bold">Trang Chủ</p>
+          </Link>
+          <Link
+            to={state.user ? '/playlist' : '/login'}
+            user-label="playlist"
+            // onMouseOver={_onMouseOver}
+            // onMouseOut={_onMouseOut}
+            className={`navigate p-2 rounded-[14px] w-full flex hover:bg-[${bgColor}] hover:text-white`}
+          >
+            <RiPlayListFill size={iconSize} />
+            <p className="ml-2 font-bold">Playlist</p>
+          </Link>
 
-          {state.user ? (
-            <div
-              user-label="favorite"
-              onMouseOver={_onMouseOver}
-              onMouseOut={_onMouseOut}
-              className={`navigate p-2 rounded-[14px] w-full flex justify-between`}
-            >
-              <Link to="/favorite" className="flex">
-                <AiOutlineHeart size={iconSize} />
-                <p className="ml-2 font-bold">Yêu Thích</p>
-              </Link>
-            </div>
-          ) : (
-            <div
-              user-label="favorite"
-              onMouseOver={_onMouseOver}
-              onMouseOut={_onMouseOut}
-              className={`navigate p-2 rounded-[14px] w-full flex justify-between`}
-            >
-              <Link to="/login" className="flex">
-                <AiOutlineHeart size={iconSize} />
-                <p className="ml-2 font-bold">Yêu Thích</p>
-              </Link>
-            </div>
-          )}
+          <Link
+            user-label="favorite"
+            // onMouseOver={_onMouseOver}
+            // onMouseOut={_onMouseOut}
+            className={`navigate p-2 rounded-[14px] w-full flex hover:bg-[${bgColor}] hover:text-white`}
+            to={state.user ? '/favorite' : '/login'}
+          >
+            <AiOutlineHeart size={iconSize} />
+            <p className="ml-2 font-bold">Yêu Thích</p>
+          </Link>
         </div>
       </div>
       {

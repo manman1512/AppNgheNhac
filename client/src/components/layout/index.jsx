@@ -5,37 +5,41 @@ import { Outlet } from 'react-router-dom';
 import Player from '../Player';
 import { Context } from '../../store/Context';
 import usersApi from '../../axiosClient/api/users';
-import { setPlaylist, setUser } from '../../store/Action';
+import { setLoveSong, setPlaylist, setUser } from '../../store/Action';
 import playlistsApi from '../../axiosClient/api/playlists';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import loveSongApi from '../../axiosClient/api/loveSong';
 
 export default function Layout() {
   // const [state, dispatch] = useContext(Context);
   const [state, dispatch] = useContext(Context);
   useEffect(() => {
     const token = window.localStorage.getItem('accessToken');
-    console.log(token);
     if (token !== null) {
       (async () => {
         const response = await usersApi.getMe();
-        // console.log(response.data.User);
+        const loveSongs = await loveSongApi.getLoveSongByUser();
+        const res = await playlistsApi.getPlaylistByUser();
+        const playlists = res.data.playlists
+        const lovesongs = loveSongs.data.lovesong;
+        dispatch(setLoveSong(lovesongs));
+        dispatch(setPlaylist(playlists))
         dispatch(setUser(response.data.User));
       })();
     }
     // console.log(state)
   }, []);
   // console.log(state);
-  useEffect(() => {
-    const getPlaylistByUser = async () => {
-      const res = await playlistsApi.getPlaylistByUser();
-      const playlists = res.data.playLists
-      // setPlaylists(playlists);
-      dispatch(setPlaylist(playlists))
-      console.log('🚀 ~ file: index.jsx:21 ~ getPlaylistByUser ~ res:', res);
-      // console.log(state.playlist)
-    };
-    getPlaylistByUser();
-  }, []);
-  
+  // useEffect(() => {
+  //   const getPlaylistByUser = async () => {
+  //     const res = await playlistsApi.getPlaylistByUser();
+  //     console.log(res);
+
+  //   };
+  //   getPlaylistByUser();
+  // }, []);
+
   return (
     <div className="h-screen relative">
       <Topbar />
@@ -53,6 +57,7 @@ export default function Layout() {
           }
         </div>
       </div>
+      <ToastContainer />
     </div>
   );
 }

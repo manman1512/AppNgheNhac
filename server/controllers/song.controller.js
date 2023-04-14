@@ -20,19 +20,24 @@ module.exports = {
   getAllSong: async (req, res) => {
     const allSongs = await songs.find().populate('artist');;
     const first15Songs = allSongs.slice(36, 46);
-    const Songs = first15Songs.map(({_id, id, artist}) => ({
+    const Songs = first15Songs.map(({ _id, id, artist }) => ({
       _id,
       id,
       artist
     }))
-   
-
-    // console.log(Songs)
     res.status(200).json(first15Songs);
   },
 
   // ADD SONG BY ADMIN
-  addSong: async (req, res) => {},
+  addSong: async (req, res) => { },
+  getLinkSong: async (req, res) => {
+    const { id } = req.query;
+    const songLink = await ZingMp3.getLinkSong(id);
+    return res.json({
+      link: songLink
+    });
+
+  },
 
   getHomeMp3: async (req, res) => {
     try {

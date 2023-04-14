@@ -23,6 +23,19 @@ const playlistsApi = {
   updatePlayListById: async (_id, data) => {
     return await axiosClient.patch('/playlists/updatePlayListById/' + _id, data);
   },
+  addSongToPlaylist: async (playListId, songId) => {
+    return await axiosClient.post("/playlists/addSongById", {
+      playListId,
+      songId
+    })
+  },
+  getSongByPlaylist: async (playlistId) => {
+    return await axiosClient.get("/playlists/getSongsByPlaylist", {
+      params: {
+        playlistId
+      }
+    })
+  }
 };
 
 export default playlistsApi;
