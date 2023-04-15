@@ -6,8 +6,9 @@ import { Link } from 'react-router-dom';
 import playlistsApi from '../../axiosClient/api/playlists';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { setPlaylist, setSelectedPlaylist, updatePlaylistSuccess } from '../../store/Action';
+import { setListSong, setPlayerPlayList, setPlayerType, setPlaylist, setSelectedPlaylist, setSelectedSong, toggleShowPlayer, updatePlaylistSuccess } from '../../store/Action';
 import { Context } from '../../store/Context';
+import { PLAYER_TYPE } from '../../store/Constant';
 
 export default function Playlist({ playlist }) {
   const PF = process.env.REACT_APP_SERVER_URL;
@@ -45,6 +46,37 @@ export default function Playlist({ playlist }) {
   const hideModal = () => {
     setShowModal(false);
   };
+  const handlePlayPlaylist = ()=>{
+    if (playlist && playlist.listSong === undefined || state.player.playlist !== playlist._id) {
+      (async () => {
+        const response = await playlistsApi.getSongByPlaylist(playlist._id);
+        if(response.data.length === 0 || !response.data){
+          toast.error("Danh sách phát rỗng!")
+        }else{
+          dispatch(setListSong(response.data, playlist._id))
+          dispatch(setPlayerType(PLAYER_TYPE.PLAYLIST))
+          dispatch(setPlayerPlayList(playlist._id))
+          
+          dispatch(setSelectedSong(response.data[0]))
+          if(!state.player.show){
+            dispatch(toggleShowPlayer())
+          }
+        }
+      })()
+    }else{
+      if(!playlist.listSong || playlist.listSong.length === 0){
+        toast.error("Danh sách phát rỗng!")
+      }else{
+        dispatch(setPlayerType(PLAYER_TYPE.PLAYLIST))
+        dispatch(setPlayerPlayList(playlist._id))
+        
+        dispatch(setSelectedSong(playlist.listSong[0]))
+        if(!state.player.show){
+          dispatch(toggleShowPlayer())
+        }
+      }
+    }
+  }
   return (
     <React.Fragment>
       <div className="ml-4 w-[200px]">
@@ -75,6 +107,7 @@ export default function Playlist({ playlist }) {
               color="white"
               className="text-[28px] hover:scale-150 cursor-pointer"
               title="Phát"
+              onClick={handlePlayPlaylist}
             />
             <Link className="" to={`/playlist/${playlist._id}`} onClick={() => dispatch(setSelectedPlaylist(playlist._id))}>
               <BsThreeDots

@@ -1,5 +1,6 @@
 import { createContext, useReducer } from 'react';
 import Reducer from './Reducer';
+import { REPEAT } from './Constant';
 
 const INITIAL_STATE = {
   user: null,
@@ -7,8 +8,12 @@ const INITIAL_STATE = {
   isFetching: false,
   error: false,
   player: {
+    show: false,
     selectedSong: null,
     isPlay: false,
+    type: "one", // type === one || playlist || lovesong; if type === one => play one, playlist => play all playlist, loveSong => play all love song
+    playlist: "",
+    repeat: window.localStorage.getItem("playerRepeat") ? window.localStorage.getItem("playerRepeat") : REPEAT.NONE
   },
   loveSong: [],
 };

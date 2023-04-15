@@ -35,7 +35,13 @@ module.exports = {
         res.status(200).json({ message: "Xoa bai hat thanh cong!", _id: songId });
       } else {
         await user.updateOne({ $push: { loveSong: songId } });
-        res.status(200).json({ message: "Thêm bai hat yêu thích thanh cong!", song });
+        res.status(200).json({ message: "Thêm bai hat yêu thích thanh cong!", song:{
+          id: song.id,
+          _id: song._id,
+          name: song.name,
+          thumbnail: song.thumbnail,
+          artist:song.artist
+        } });
       }
     } catch (error) {
       console.log(error);

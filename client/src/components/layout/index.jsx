@@ -53,7 +53,7 @@ export default function Layout() {
           <Outlet />
           {
             // state.player.selectedSong && <Player/>
-            state?.player?.selectedSong && <Player />
+            state.player.show && <Player />
           }
         </div>
       </div>

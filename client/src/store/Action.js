@@ -1,4 +1,4 @@
-import { ADD_LOVE_SONG, ADD_SONG_TO_PLAYLIST, REMOVE_LOVE_SONG, SET_FAVORITE_SONG, SET_LIST_SONG, SET_LOVE_SONG, SET_SELECTED_PLAYLIST, UPDATE_LINK_SONG } from "./Constant";
+import { ADD_LOVE_SONG, ADD_SONG_TO_PLAYLIST, HANDLE_PAUSE, HANDLE_PLAY, REMOVE_LOVE_SONG, SET_FAVORITE_SONG, SET_LIST_SONG, SET_LOVE_SONG, SET_PLAYER_PLAYLIST, SET_PLAYER_TYPE, SET_REPEAT, SET_SELECTED_PLAYLIST, TOGGLE_SHOW_PLAYER, UPDATE_LINK_SONG } from "./Constant";
 
 function setUser(user = null) {
   return {
@@ -50,10 +50,13 @@ function togglePlay() {
   };
 }
 
-function setListSong(listSong) {
+function setListSong(listSong, _id) {
   return {
     type: SET_LIST_SONG,
-    payload: listSong,
+    payload: {
+      listSong,
+      _id
+    },
   };
 }
 function updatePlaylist(playlist) {
@@ -107,7 +110,39 @@ function updateLinkSong(songId, link) {
     }
   }
 }
-
+function setPlayerType(type){
+  return {
+    type: SET_PLAYER_TYPE,
+    payload: type
+  }
+}
+function setPlayerPlayList(playlistId){
+  return {
+    type: SET_PLAYER_PLAYLIST,
+    payload: playlistId
+  }
+}
+function handleSetRepeat(repeat){
+  return {
+    type: SET_REPEAT,
+    payload: repeat
+  }
+}
+function toggleShowPlayer(){
+  return {
+    type: TOGGLE_SHOW_PLAYER 
+  }
+}
+function handlePlay(){
+  return {
+    type: HANDLE_PLAY
+  }
+}
+function handlePause(){
+  return {
+    type: HANDLE_PAUSE
+  }
+}
 export {
   setUser,
   updateStart,
@@ -119,5 +154,11 @@ export {
   setListSong,
   updatePlaylist,
   updatePlaylistSuccess,
+  setPlayerType,
+  setPlayerPlayList,
+  handleSetRepeat,
+  toggleShowPlayer,
+  handlePlay,
+  handlePause,
   setPlaylist, setSelectedPlaylist, addSongToPlaylist, setLoveSong, addLoveSong, removeLoveSong, updateLinkSong
 };

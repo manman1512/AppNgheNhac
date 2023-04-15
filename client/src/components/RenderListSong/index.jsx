@@ -2,10 +2,12 @@ import React, { useContext, useEffect, useState } from 'react';
 import { HiPlay } from 'react-icons/hi';
 import { BsHeartFill, BsFillPauseCircleFill } from 'react-icons/bs';
 import { Context } from '../../store/Context';
-import { addLoveSong, removeLoveSong, setSelectedSong, updateLinkSong } from '../../store/Action';
+import { addLoveSong, handlePlay, removeLoveSong, setPlayerType, setSelectedSong, toggleShowPlayer, updateLinkSong } from '../../store/Action';
 import loveSongApi from '../../axiosClient/api/loveSong';
 import { AiFillHeart, AiOutlineHeart } from 'react-icons/ai';
 import songsApi from '../../axiosClient/api/songs';
+import { PLAYER_TYPE } from '../../store/Constant';
+import { useLocation } from 'react-router-dom';
 
 export default function RenderListSong({ listSong, onSongClick, onFavorite }) {
   const [state, dispatch] = useContext(Context);
@@ -34,17 +36,18 @@ export default function RenderListSong({ listSong, onSongClick, onFavorite }) {
 
     }
   };
+  const path = useLocation().pathname;
+  console.log(path);
   const setSong = async (l) => {
-    if (l.link === undefined) {
-      const response = await songsApi.getLinkSong(l.id)
-      const link = response.data.data["128"]
-      dispatch(updateLinkSong(l._id, link))
-      dispatch(setSelectedSong({
-        ...l,
-        link
-      }))
-    } else {
-      dispatch(setSelectedSong(l))
+    dispatch(setSelectedSong(l))
+    if(!state.player.show){
+      dispatch(toggleShowPlayer())
+    }
+    dispatch(handlePlay());
+    if(!path.includes("favorite"))
+      dispatch(setPlayerType(PLAYER_TYPE.ONE))
+    else{
+      dispatch(setPlayerType(PLAYER_TYPE.LOVESONG));
     }
   }
   console.log(state);
