@@ -15,6 +15,14 @@ const songsApi = {
   },
   getLinkSong: async (songId) => {
     return await axiosClient.get(`/songs/getSongMP3/${songId}`)
+  },
+  searchSongs: async(title) => {
+    return await axiosClient.get("/songs/search", {
+      params: {
+        title,
+        take: 5
+      }
+    })
   }
 };
 

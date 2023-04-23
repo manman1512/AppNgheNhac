@@ -57,10 +57,12 @@ export default function Playlists() {
       });
       // SET LẠI PLAYLIST CHO HIỆN LÊN GIAO DIỆN
       const datas = await playlistsApi.getPlaylistByUser();
-      setPlaylists(datas.data.playLists);
-      // console.log(datas.data.playLists)
-      dispatch(setPlaylist(datas.data.playLists))
-      dispatch(updatePlaylistSuccess(datas.data.playLists));
+      setPlaylists(datas.data.playlists);
+      
+      // console.log(datas.data); 
+
+      dispatch(setPlaylist(datas.data.playlists))
+      dispatch(updatePlaylistSuccess(datas.data.playlists));
 
     } catch (err) {
       console.log(err);

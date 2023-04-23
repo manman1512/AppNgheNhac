@@ -1,13 +1,15 @@
 const express = require('express');
 const router = express.Router();
 
-const {getSong, getAllSong, getHomeMp3, getSongMP3} = require('../controllers/song.controller')
+const {getSong, getAllSong, getHomeMp3, getSongMP3, getSongByName, searchSongs} = require('../controllers/song.controller')
 
 router.get('/getSong/:id', getSong)
+router.get('/getSongByName', getSongByName)
 router.get('/getAllSong', getAllSong)
 
 router.get('/getSongMP3/:id', getSongMP3)
 router.get('/getHomeMp3', getHomeMp3)
+router.get("/search", searchSongs)
 
 module.exports = router;
 

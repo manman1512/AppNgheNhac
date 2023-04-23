@@ -17,6 +17,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import { FormProvider, useForm } from 'react-hook-form';
 import EditUser from './EditUser.jsx';
+import Search from './Search';
 
 export default function Topbar() {
   const [state, dispatch] = useContext(Context);
@@ -70,7 +71,7 @@ export default function Topbar() {
         '/users/updateDisplayName/',
         updateUser
       );
-      console.log("🚀 ~ file: Topbar.jsx:72 ~ handleSubmitAvt ~ res:", res)
+      console.log('🚀 ~ file: Topbar.jsx:72 ~ handleSubmitAvt ~ res:', res);
       toast.success('Cập nhập thành công!', {
         position: 'top-right',
         autoClose: 500,
@@ -82,48 +83,7 @@ export default function Topbar() {
         theme: 'colored',
         duration: 1000,
         onClose: () => {
-          setShowModal(false)
-        },
-      });
-      console.log(res);
-      dispatch({ type: 'UPDATE_SUCCESS', payload: res.data.updateUser });
-     
-
-    } catch (error) {
-      console.log(error);
-      dispatch({ type: 'UPDATE_FAILURE' });
-    }
-  };
-
-  const onSubmit = async (e) => {
-    e.preventDefault();
-    const password = e.password;
-    const passwordConf = e.passwordConf;
-
-    dispatch({ type: 'UPDATE_START' });
-    const updateUser = {
-      userId: state.user._id,
-      password,
-      passwordOld,
-    };
-
-    try {
-      const res = await axiosClient.put(
-        '/users/update/',
-        updateUser
-      );
-      toast.success('Cập nhật thành công!', {
-        position: 'top-right',
-        autoClose: 500,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: 'colored',
-        duration: 1000,
-        onClose: () => {
-          setShowModalPass(false)
+          setShowModal(false);
         },
       });
       console.log(res);
@@ -156,7 +116,7 @@ export default function Topbar() {
         /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])/,
         'Mật khẩu phải chứa số, chữ in, chữ thường và kí tự đặc biệt!'
       ),
-      passwordConf: yup
+    passwordConf: yup
       .string()
       .oneOf([yup.ref('password'), null], 'Mật khẩu nhập lại không đúng!'),
   });
@@ -177,37 +137,14 @@ export default function Topbar() {
       </Link>
 
       <div className="relative w-[28rem] mx-auto">
-        <input
-          type="search"
-          className="block p-2 w-full z-20 rounded-3xl
-            border-gray-500 border outline-none "
-          placeholder="Tìm kiếm bài hát, nghệ sĩ, album..."
-        />
-        <button
-          type="submit"
-          className="absolute top-0 right-0 p-2.5
-              rounded-r-3xl border border-gray-500
-             focus:outline-none  dark:bg-[#AEE9C5]
-             "
-        >
-          <svg
-            aria-hidden="true"
-            className="w-5 h-5"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-            // xmlns="http://www.w3.org/2000/svg"
-          >
-            <HiOutlineSearch size="1.5rem" className="" />
-          </svg>
-        </button>
+        <Search />
       </div>
 
       {state.user ? (
         <div className="cursor-pointer mr-5">
           <div
             className="flex items-center justify-center flex-initial group bg-[#51cf85] p-1
-            rounded-full"
+            rounded-full "
           >
             <img
               className="w-[35px] h-[35px] rounded-full object-cover cursor-pointer"
@@ -313,7 +250,9 @@ export default function Topbar() {
                         onChange={(e) => setFile(e.target.files[0])}
                       />
                     </div>
-
+                    <div className="mb-3 font-bold">
+                      {state.user ? state.user.displayName : ''}
+                    </div>
                     <div className="flex justify-center">
                       <label htmlFor="displayName" className="mt-3 mr-3 mb-2">
                         Tên hiển thị
@@ -359,7 +298,6 @@ export default function Topbar() {
                     >
                       Cập nhật
                     </button>
-                    <ToastContainer className="mt-9" />
                   </div>
                 </form>
               </div>
@@ -369,22 +307,21 @@ export default function Topbar() {
         </div>
       ) : null}
       {
-
         // {showModalPass ? (
         //   <div>
         //     <div
-        //       className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed 
+        //       className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed
         //     inset-0 z-50 outline-none focus:outline-none"
         //     >
         //       <div className="relative w-auto my-6 mx-auto max-w-3xl">
         //         {/*content*/}
         //         <div
-        //           className="border-0 rounded-lg shadow-lg relative flex flex-col w-full 
+        //           className="border-0 rounded-lg shadow-lg relative flex flex-col w-full
         //         bg-white outline-none focus:outline-none"
         //         >
         //           {/*header*/}
         //           <div
-        //             className="flex justify-center p-5 border-b border-solid 
+        //             className="flex justify-center p-5 border-b border-solid
         //           border-slate-200 rounded-t"
         //           >
         //             <h3 className="text-2xl font-bold">Thay đổi mật khẩu</h3>
@@ -393,7 +330,7 @@ export default function Topbar() {
         //           <FormProvider {...method}>
         //           <form
         //             className="flex flex-col text-lg"
-        //             onSubmit={method.handleSubmit(onSubmit)}
+        // onSubmit={method.handleSubmit(onSubmit)}
         //           >
         //             <div className="flex flex-col justify-center items-center border-2 p-4 bg-[#F5F5F6]">
         //               <div className="mt-3">
@@ -431,7 +368,6 @@ export default function Topbar() {
         //                 ) : (
         //                   <div></div>
         //                 )}
-  
         //               </div>
         //               <div className="mt-3">
         //                 <label htmlFor="passwordConf" className="mt-3 mr-7 ">
@@ -455,7 +391,6 @@ export default function Topbar() {
         //                 ) : (
         //                   <div></div>
         //                 )}
-  
         //               </div>
         //             </div>
         //             {/*footer*/}
@@ -467,10 +402,9 @@ export default function Topbar() {
         //               >
         //                 Đóng
         //               </button>
-  
         //               <button
-        //                 className="bg-emerald-500 text-white active:bg-emerald-600 font-bold 
-        //               uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none 
+        //                 className="bg-emerald-500 text-white active:bg-emerald-600 font-bold
+        //               uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none
         //               focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
         //                 type="submit"
         //               >
@@ -487,7 +421,10 @@ export default function Topbar() {
         //   </div>
         // ) : null}
       }
-      <EditUser showModalPass={showModalPass} onClose={()=>setShowModalPass(false)}/>
+      <EditUser
+        showModalPass={showModalPass}
+        onClose={() => setShowModalPass(false)}
+      />
     </div>
   );
 }

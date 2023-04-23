@@ -5,10 +5,52 @@ import { RxDot } from 'react-icons/rx';
 import { TiDeleteOutline } from 'react-icons/ti';
 import { Context } from '../../store/Context';
 import { AiOutlineEdit } from 'react-icons/ai';
+import playlistsApi from '../../axiosClient/api/playlists';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { setListSong, setPlayerPlayList, setPlayerType, setSelectedSong, toggleShowPlayer } from '../../store/Action';
+import { PLAYER_TYPE } from '../../store/Constant';
 
 export default function InfoPlaylist({ playlist, onOpen, length, user }) {
   const PF = process.env.REACT_APP_SERVER_URL;
   // console.log(playlist);
+  const [state, dispatch] = useContext(Context);
+
+  const handlePlayPlaylist = () => {
+    if (
+      (playlist && playlist.listSong === undefined) ||
+      state.player.playlist !== playlist._id
+    ) {
+      (async () => {
+        const response = await playlistsApi.getSongByPlaylist(playlist._id);
+        if (response.data.length === 0 || !response.data) {
+          toast.error('Danh sách phát rỗng!');
+        } else {
+          dispatch(setListSong(response.data, playlist._id));
+          dispatch(setPlayerType(PLAYER_TYPE.PLAYLIST));
+          dispatch(setPlayerPlayList(playlist._id));
+
+          dispatch(setSelectedSong(response.data[0]));
+          if (!state.player.show) {
+            dispatch(toggleShowPlayer());
+          }
+        }
+      })();
+    } else {
+      if (!playlist.listSong || playlist.listSong.length === 0) {
+        toast.error('Danh sách phát rỗng!');
+      } else {
+        dispatch(setPlayerType(PLAYER_TYPE.PLAYLIST));
+        dispatch(setPlayerPlayList(playlist._id));
+
+        dispatch(setSelectedSong(playlist.listSong[0]));
+        if (!state.player.show) {
+          dispatch(toggleShowPlayer());
+        }
+      }
+    }
+  };
+
   return (
     <React.Fragment>
       {playlist && (
@@ -40,6 +82,7 @@ export default function InfoPlaylist({ playlist, onOpen, length, user }) {
                 color="white"
                 className="text-[28px] hover:scale-150 cursor-pointer"
                 title={playlist.title}
+                onClick={handlePlayPlaylist}
               />
 
               <AiOutlineEdit
