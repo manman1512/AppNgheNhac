@@ -79,6 +79,15 @@ export default function EditUser({ showModalPass, onClose }) {
       dispatch({ type: 'UPDATE_FAILURE' });
     }
   };
+  const handleOverlayClick = (event) => {
+    // Đóng modal khi click vào phần overlay bao quanh
+    if (
+      event.target.classList.contains('inset-0') &&
+      event.target.classList.contains('z-50')
+    ) {
+      onClose()
+    }
+  };
   return (
     <React.Fragment>
       <div>
@@ -87,6 +96,7 @@ export default function EditUser({ showModalPass, onClose }) {
             <div
               className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed 
           inset-0 z-50 outline-none focus:outline-none"
+          onClick={handleOverlayClick}
             >
               <div className="relative w-auto my-6 mx-auto max-w-3xl">
                 {/*content*/}

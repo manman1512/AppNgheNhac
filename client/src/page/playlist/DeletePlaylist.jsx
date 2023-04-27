@@ -4,8 +4,10 @@ import { Context } from '../../store/Context';
 import playlistsApi from '../../axiosClient/api/playlists';
 import { setPlaylist, updatePlaylistSuccess } from '../../store/Action';
 import { ToastContainer, toast } from 'react-toastify';
+import { useNavigate } from 'react-router-dom';
 
 export default function DeletePlaylist({ playlist, onClose }) {
+  const navigate = useNavigate();
   const [state, dispatch] = useContext(Context)
   const handleOverlayClick = (event) => {
     // Đóng modal khi click vào phần overlay bao quanh
@@ -34,6 +36,7 @@ export default function DeletePlaylist({ playlist, onClose }) {
         duration: 1000,
         onClose: () => {
           onClose()
+          navigate('/playlist', { replace: true });
         },
       });
       const datas = await playlistsApi.getPlaylistByUser();
@@ -44,12 +47,14 @@ export default function DeletePlaylist({ playlist, onClose }) {
       console.log(error);
     }
   };
+  
   return (
     <React.Fragment>
       <div>
           <div
             className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed 
           inset-0 z-50 outline-none focus:outline-none"
+          onClick={handleOverlayClick}
           >
             <div className="relative w-auto my-6 mx-auto max-w-3xl">
               {/*content*/}

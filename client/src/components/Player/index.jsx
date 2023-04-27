@@ -30,7 +30,7 @@ export default function Player() {
   const {
     player: { selectedSong, isPlay },
   } = state;
-  const [currentTime, setCurrentTime] = useState(0);
+  const [currentTime, setCurrentTime] = useState(0);  //thời gian hiện tại
   const [songDuration, setSongDuration] = useState(0);
   const [progress, setProgress] = useState(0);
   const [mute, setMute] = useState(false);

@@ -28,7 +28,7 @@ export default function Playlists() {
   };
   const modal = () => {
     setShowModal(false);
-    setImage(null)
+    setImage(null);
   };
   const handleSubmit = async () => {
     const formData = new FormData();
@@ -52,18 +52,17 @@ export default function Playlists() {
         theme: 'colored',
         duration: 1000,
         onClose: () => {
-          setShowModal(false)
+          setShowModal(false);
         },
       });
       // SET LẠI PLAYLIST CHO HIỆN LÊN GIAO DIỆN
       const datas = await playlistsApi.getPlaylistByUser();
       setPlaylists(datas.data.playlists);
-      
-      // console.log(datas.data); 
 
-      dispatch(setPlaylist(datas.data.playlists))
+      // console.log(datas.data);
+
+      dispatch(setPlaylist(datas.data.playlists));
       dispatch(updatePlaylistSuccess(datas.data.playlists));
-
     } catch (err) {
       console.log(err);
     }
@@ -100,7 +99,7 @@ export default function Playlists() {
           <div
             className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed 
           inset-0 z-50 outline-none focus:outline-none"
-          onClick={handleOverlayClick} 
+            onClick={handleOverlayClick}
           >
             <div className="relative w-auto my-6 mx-auto max-w-3xl">
               {/*content*/}
@@ -135,13 +134,13 @@ export default function Playlists() {
                               backgroundImage: `url(${URL.createObjectURL(
                                 image
                               )})`,
-                              backgroundSize: '100% 100%'
+                              backgroundSize: '100% 100%',
                             }}
                           ></div>
                         ) : (
                           <React.Fragment>
-                            <IoMdImages size="3rem" color='black' />
-                            <p className='text-black'>Chọn ảnh</p>
+                            <IoMdImages size="3rem" color="black" />
+                            <p className="text-black">Chọn ảnh</p>
                           </React.Fragment>
                         )}
                       </label>

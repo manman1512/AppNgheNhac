@@ -40,6 +40,21 @@ const Reducer = (state, action) => {
         isFetching: false,
         error: false,
       };
+    case 'UPDATE_PLAYLIST_SUCCESS':
+      console.log(action.payload);
+      return {
+        ...state,
+        playlist: state.playlist.map(p=>{
+          if (p._id === action.payload._id){
+            return {
+              ...p,
+              ...action.payload.update
+            }
+          }else{
+            return p;
+          }
+        })
+      }
     case 'UPDATE_FAILURE':
       return {
         ...state,

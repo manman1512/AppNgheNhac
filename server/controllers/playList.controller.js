@@ -177,6 +177,7 @@ module.exports = {
             { $set: update },
             { new: true }
           );
+          // console.log(updatePlaylist)
           res
             .status(200)
             .json({

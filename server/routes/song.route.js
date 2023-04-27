@@ -4,7 +4,7 @@ const router = express.Router();
 const {getSong, getAllSong, getHomeMp3, getSongMP3, getSongByName, searchSongs} = require('../controllers/song.controller')
 
 router.get('/getSong/:id', getSong)
-router.get('/getSongByName', getSongByName)
+// router.get('/getSongByName', getSongByName)
 router.get('/getAllSong', getAllSong)
 
 router.get('/getSongMP3/:id', getSongMP3)

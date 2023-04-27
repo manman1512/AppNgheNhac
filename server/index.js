@@ -54,7 +54,6 @@ const PORT = process.env.PORT || 2023;
     filename: (req, file, cb, ) => {
       // const name = req.body.name.replaceAll(' ', '%20');
       // console.log(name);
-      console.log(req.body)
       cb(null, req.body.fileName);
       // req.body = name;
     },
@@ -65,12 +64,30 @@ const PORT = process.env.PORT || 2023;
   app.use('/api/auth', authRouter)
   app.use('/api/songs', songRouter)
   app.use(middleware);
-  
+  app.patch("/api/playlists/updatePlaylistById", upload.single("file"),async (req, res) => {
+    try{
+
+      const {id, ...data} = req.body;
+      data.thumbnail = data.fileName;
+    delete data.fileName;
+    const playlist = await playListModel.findByIdAndUpdate(
+      id,
+      {$set: data},
+      {new: true}
+      )
+      res.status(200).json({
+        _id: id,
+        update: data
+      })
+    }catch(error){
+      res.status(500).json({message: error.message})
+    }
+    
+  })
   app.post('/api/playlists/create', upload.single('file'), async (req, res) => {
     try {
       const { _id } = req.user;
       const { fileName, title, description } = req.body;
-      console.log("🚀 ~ file: index.js:74 ~ app.post ~ fileName:", fileName)
       const user = await userModel.findById(_id);
       if (user) {
         const newPlaylist = await playListModel.create({

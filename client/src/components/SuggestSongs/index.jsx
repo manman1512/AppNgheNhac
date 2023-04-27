@@ -35,6 +35,9 @@ export default function SuggestSongs() {
     };
     getAllSong();
   }, []);
+  useEffect(() => {
+    
+  })
   return (
     <div className="flex flex-auto w-auto flex-col gap-[67px]">
       <div

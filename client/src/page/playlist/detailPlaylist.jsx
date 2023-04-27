@@ -6,7 +6,7 @@ import { format } from 'date-fns';
 import RenderListSong from '../../components/RenderListSong';
 import EditPlaylist from './EditPlaylist';
 import InfoPlaylist from './InfoPlaylist';
-import SuggestSongs from "../../components/SuggestSongs"
+import SuggestSongs from '../../components/SuggestSongs';
 import { setListSong, setSelectedPlaylist } from '../../store/Action';
 const moment = require('moment');
 require('moment/locale/vi'); // Load Vietnamese locale
@@ -15,7 +15,7 @@ export default function DetailPlaylist(props) {
   const [state, dispatch] = useContext(Context);
   const param = useParams();
   const path = param.playlistId;
-  const selectedPlaylist = state.playlist.find(p => p.selected);
+  const selectedPlaylist = state.playlist.find((p) => p.selected);
   const [showModalEditPlaylist, setShowModalEditPlaylist] = useState(false);
   const handleCloseModal = () => {
     setShowModalEditPlaylist(false);
@@ -25,21 +25,25 @@ export default function DetailPlaylist(props) {
     setShowModalEditPlaylist(true);
   };
   useEffect(() => {
-    const isEveryHaveSelected = state.playlist.map(p => p.selected).every(x => x === undefined);
+    const isEveryHaveSelected = state.playlist
+      .map((p) => p.selected)
+      .every((x) => x === undefined);
     if (path && isEveryHaveSelected && state.playlist.length > 0) {
-      dispatch(setSelectedPlaylist(path))
+      dispatch(setSelectedPlaylist(path));
     }
-  }, [path, state.playlist])
+  }, [path, state.playlist]);
   useEffect(() => {
-    const selectedPlaylist = state.playlist.find(s => s.selected);
+    const selectedPlaylist = state.playlist.find((s) => s.selected);
     if (selectedPlaylist && selectedPlaylist.listSong === undefined) {
       (async () => {
-        const response = await playlistsApi.getSongByPlaylist(selectedPlaylist._id);
-        dispatch(setListSong(response.data))
-
-      })()
+        const response = await playlistsApi.getSongByPlaylist(
+          selectedPlaylist._id
+        );
+        dispatch(setListSong(response.data));
+      })();
     }
-  }, [state.playlist])
+    console.log(selectedPlaylist)
+  }, [state.playlist]);
   console.log(state);
   return (
     <React.Fragment>
@@ -49,7 +53,9 @@ export default function DetailPlaylist(props) {
             <InfoPlaylist
               playlist={selectedPlaylist}
               onOpen={handleOpenModal}
-              length={selectedPlaylist.listSong ? selectedPlaylist.listSong.length : 0}
+              length={
+                selectedPlaylist.listSong ? selectedPlaylist.listSong.length : 0
+              }
               user={state.user}
             />
           )}
@@ -58,23 +64,19 @@ export default function DetailPlaylist(props) {
               playlist={state.playlist.find((x) => x._id === path)}
               // onApply={handleApplyChange}
               onClose={handleCloseModal}
-            // playlist={state.playlist}
+              // playlist={state.playlist}
             />
           )}
         </div>
-        <div className='flex-[2]'>
-          {
-            selectedPlaylist &&
-            (selectedPlaylist.listSong === undefined || selectedPlaylist.listSong.length === 0 ?
+        <div className="flex-[2]">
+          {selectedPlaylist &&
+            (selectedPlaylist.listSong === undefined ||
+            selectedPlaylist.listSong.length === 0 ? (
               <SuggestSongs />
-              :
-              <RenderListSong
-                listSong={selectedPlaylist.listSong}
-              />)
-          }
+            ) : (
+              <RenderListSong listSong={selectedPlaylist.listSong} />
+            ))}
         </div>
-        { //       <AddSongOnPlaylist show={show} onClose={()=>setShow(false)}/>
-        }
       </div>
     </React.Fragment>
   );

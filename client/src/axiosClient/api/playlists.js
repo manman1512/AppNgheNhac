@@ -20,8 +20,10 @@ const playlistsApi = {
   deletePlayListById: async (data) => {
     return await axiosClient.delete('playlists/deletePlayListById/' + data);
   },
-  updatePlayListById: async (_id, data) => {
-    return await axiosClient.patch('/playlists/updatePlayListById/' + _id, data);
+  updatePlayListById: async (data) => {
+    return await axiosClient.patch('/playlists/updatePlayListById/', data, {
+      headers: { 'content-type': 'multipart/form-data'}
+    });
   },
   addSongToPlaylist: async (playListId, songId) => {
     return await axiosClient.post("/playlists/addSongById", {

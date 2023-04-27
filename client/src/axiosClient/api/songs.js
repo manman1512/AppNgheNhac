@@ -20,7 +20,7 @@ const songsApi = {
     return await axiosClient.get("/songs/search", {
       params: {
         title,
-        take: 5
+        take: 100
       }
     })
   }

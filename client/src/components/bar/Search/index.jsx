@@ -101,13 +101,3 @@ export default function Search() {
     </div>
   );
 }
-
-// import React from 'react'
-
-// export default function Search() {
-//   return (
-//     <div>
-
-//     </div>
-//   )
-// }

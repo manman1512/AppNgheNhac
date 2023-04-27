@@ -15,20 +15,6 @@ module.exports = {
       console.log(error);
     }
   },
-  //////////////
-  getSongByName: async (req, res) => {
-    // try {
-    //   const query = req.query.q; // Assuming the search query is passed as a URL query parameter named 'q'
-    //   const regexQuery = new RegExp(query, 'i'); // Case-insensitive regex query
-      
-    //   const songs = await songs.find({ title: regexQuery }); // Assuming the song title is the property you're searching against
-      
-    //   res.json(songs);
-    // } catch (err) {
-    //   console.error(err);
-    //   res.status(500).json({ error: 'Internal server error' });
-    // }
-  },
 
   // GET ALL SONG
   getAllSong: async (req, res) => {

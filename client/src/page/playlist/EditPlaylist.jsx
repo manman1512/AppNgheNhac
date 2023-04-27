@@ -13,43 +13,40 @@ import { updatePlaylistSuccess } from '../../store/Action';
 // export default function EditPlaylist({ playlist, onClose, onApply }) {
 export default function EditPlaylist({ playlist, onClose }) {
   const [image, setImage] = useState(null);
-  const [title, setTitle] = useState('');
-  const [description, setDescription] = useState('');
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
+  const [linkThumbnail, setLinkThumbnail] = useState("");
+  useEffect(()=>{
+    if(image){
+      const url = URL.createObjectURL(image);
+      setLinkThumbnail(url)
+    }
+    return ()=> URL.revokeObjectURL(linkThumbnail);
+  },[image])
   const [state, dispatch] = useContext(Context);
   const navigate = useNavigate();
-
-  useEffect(() => {
-    console.log(image);
-    // console.log(state.playlist)
-  }, [image]);
+  useEffect(()=>{
+    setTitle(playlist.title)
+    setDescription(playlist.description)
+  },[playlist.title, playlist.description])
 
   const handleApplyChange = async (e) => {
     dispatch({ type: 'UPDATE_PLAYLIST' });
     const updatePlaylist = {
-      playlistId: playlist._id,
       title,
       description,
+      thumbnail: image
     };
-
-    // if(image){
-    //   const data = new FormData();
-    //   const fileName = Date.now() + image.name;
-    //   data.append('fileName', fileName);
-    //   data.append('image', image);
-    //   updatePlaylist.thumbnail = fileName;
-    //   try {
-    //     const response = await playlistsApi.updatePlayListById(data);
-    //     console.log(response)
-    //   } catch (error) {
-    //     console.log(error);
-    //   }
-    // }
-
+    const newForm = new FormData();
+    newForm.append("id", playlist._id)
+    newForm.append("title", title)
+    newForm.append("description", description)
+    newForm.append("fileName", Date.now()+Math.floor(Math.random() * (999 - 100 + 1) + 100)+"." + image.name.split(".").pop())
+    newForm.append("file", image);
     try {
-      const res = await playlistsApi.updatePlayListById(
-        playlist._id,
-        updatePlaylist
-      );
+      const res = await playlistsApi.updatePlayListById(newForm);
+      console.log(res);
+
       toast.success('Cập nhật Playlist thành công!', {
         position: 'top-right',
         autoClose: 500,
@@ -63,11 +60,11 @@ export default function EditPlaylist({ playlist, onClose }) {
         onClose: () => {
           onClose();
           // navigate('/playlist/{playlist._id}', { replace: true });
-          
         },
       });
-      console.log(res)
-      dispatch(updatePlaylistSuccess(res.data.update));
+      console.log(res);
+      dispatch(updatePlaylistSuccess(res.data));
+      // console.log(res);
     } catch (error) {
       console.log(error);
     }
@@ -76,7 +73,7 @@ export default function EditPlaylist({ playlist, onClose }) {
     <React.Fragment>
       <div
         className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed
-                    inset-0 z-50 outline-none focus:outline-none"
+                    inset-0 z-[1000] outline-none focus:outline-none"
       >
         <div className="relative w-auto my-6 mx-auto max-w-3xl">
           {/*content*/}
@@ -104,11 +101,11 @@ export default function EditPlaylist({ playlist, onClose }) {
                     className="flex flex-col items-center justify-center
                           mb-2 cursor-pointer text-sm"
                   >
-                    {image ? (
+                    {linkThumbnail ? (
                       <div
                         className="w-40 h-44 bg-contain bg-no-repeat rounded-xl"
                         style={{
-                          backgroundImage: `url(${URL.createObjectURL(image)})`,
+                          backgroundImage: `url(${linkThumbnail})`,
                           backgroundSize: '100% 100%',
                         }}
                       ></div>
@@ -130,18 +127,17 @@ export default function EditPlaylist({ playlist, onClose }) {
                   />
                 </div>
                 <div className="flex gap-3 flex-col justify-around items-center">
-                  <textarea
-                    // value=
+                  <input
+                    value={title}
                     onChange={(e) => setTitle(e.target.value)}
                     id="title"
                     name="title"
-                    rows="2"
                     className="block p-2.5 w-full text-sm resize-none outline-none
                             border border-black rounded-xl"
                     placeholder={playlist.title}
-                  ></textarea>
+                    />
                   <textarea
-                    // value=
+                    value={description}
                     onChange={(e) => setDescription(e.target.value)}
                     id="message"
                     rows="4"

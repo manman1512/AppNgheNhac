@@ -1,5 +1,5 @@
 import { format } from 'date-fns';
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import { BsFillPlayCircleFill, BsThreeDots } from 'react-icons/bs';
 import { RxDot } from 'react-icons/rx';
 import { TiDeleteOutline } from 'react-icons/ti';
@@ -8,14 +8,27 @@ import { AiOutlineEdit } from 'react-icons/ai';
 import playlistsApi from '../../axiosClient/api/playlists';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { setListSong, setPlayerPlayList, setPlayerType, setSelectedSong, toggleShowPlayer } from '../../store/Action';
+import {
+  setListSong,
+  setPlayerPlayList,
+  setPlayerType,
+  setSelectedSong,
+  toggleShowPlayer,
+} from '../../store/Action';
 import { PLAYER_TYPE } from '../../store/Constant';
+import DeletePlaylist from './DeletePlaylist';
 
 export default function InfoPlaylist({ playlist, onOpen, length, user }) {
   const PF = process.env.REACT_APP_SERVER_URL;
   // console.log(playlist);
   const [state, dispatch] = useContext(Context);
-
+  const [showModal, setShowModal] = useState(false);
+  const handleShow = () => {
+    setShowModal(true);
+  };
+  const hideModal = () => {
+    setShowModal(false);
+  };
   const handlePlayPlaylist = () => {
     if (
       (playlist && playlist.listSong === undefined) ||
@@ -77,6 +90,7 @@ export default function InfoPlaylist({ playlist, onOpen, length, user }) {
                 color="white"
                 className="text-[33px] hover:scale-150 cursor-pointer"
                 title="Xóa"
+                onClick={handleShow}
               />
               <BsFillPlayCircleFill
                 color="white"
@@ -118,6 +132,13 @@ export default function InfoPlaylist({ playlist, onOpen, length, user }) {
             </div>
           </div>
         </React.Fragment>
+      )}
+      {showModal && (
+        <DeletePlaylist
+          playlist={playlist}
+          show={setShowModal}
+          onClose={hideModal}
+        />
       )}
     </React.Fragment>
   );

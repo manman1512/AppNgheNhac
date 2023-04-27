@@ -125,11 +125,20 @@ export default function Topbar() {
     mode: 'all',
     resolver: yupResolver(schema),
   });
-
+  const handleOverlayClick = (event) => {
+    // Đóng modal khi click vào phần overlay bao quanh
+    if (
+      event.target.classList.contains('inset-0') &&
+      event.target.classList.contains('z-50')
+    ) {
+      modal()
+    }
+  };
   return (
     <div
       className=" h-16  flex items-center 
       w-auto sticky top-0 font-sanspx-2 z-[1] border-b border-[#e5e5e5]"
+      onClick={handleOverlayClick}
     >
       <Link to="/" className=" font-semibold items-center flex">
         <img className="w-[55px] h-[55px] items-center" src={Logoo} alt="" />

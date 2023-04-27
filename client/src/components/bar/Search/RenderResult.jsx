@@ -10,7 +10,7 @@ export default function RenderResult({ data }) {
 
   }
   if (data.length === 0) {
-    return <div>Empty</div>;
+    return <div>Không tìm thấy bài hát</div>;
   } else {
     return (
       <div>
